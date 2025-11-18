@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Signup() {
@@ -23,6 +23,8 @@ export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [role, setRole] = useState<UserRole>('end-user');
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -172,19 +174,29 @@ export default function Signup() {
           {/* Password Field */}
           <div className="space-y-2">
             <Label htmlFor="password" className="text-sm font-semibold">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                if (errors.password) setErrors({ ...errors, password: '' });
-              }}
-              className={`rounded-xl py-3 px-4 transition-all duration-200 ${
-                errors.password ? 'border-destructive bg-destructive/5' : 'hover:border-primary/30 focus:border-primary'
-              }`}
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errors.password) setErrors({ ...errors, password: '' });
+                }}
+                className={`rounded-xl py-3 px-4 pr-12 transition-all duration-200 ${
+                  errors.password ? 'border-destructive bg-destructive/5' : 'hover:border-primary/30 focus:border-primary'
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
             {password && (
               <div className="flex items-center gap-2 text-sm pt-2">
                 <div className="flex-1 bg-muted rounded-full h-2">
@@ -207,19 +219,29 @@ export default function Signup() {
           {/* Confirm Password Field */}
           <div className="space-y-2">
             <Label htmlFor="confirmPassword" className="text-sm font-semibold">Confirm Password</Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              placeholder="••••••••"
-              value={confirmPassword}
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-                if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: '' });
-              }}
-              className={`rounded-xl py-3 px-4 transition-all duration-200 ${
-                errors.confirmPassword ? 'border-destructive bg-destructive/5' : 'hover:border-primary/30 focus:border-primary'
-              }`}
-            />
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: '' });
+                }}
+                className={`rounded-xl py-3 px-4 pr-12 transition-all duration-200 ${
+                  errors.confirmPassword ? 'border-destructive bg-destructive/5' : 'hover:border-primary/30 focus:border-primary'
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+              >
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
             {password && confirmPassword && password === confirmPassword && (
               <div className="flex items-center gap-2 text-sm text-success font-medium pt-2">
                 <CheckCircle2 size={16} />
