@@ -1,7 +1,4 @@
-import "./global.css";
-
 import { Toaster } from "@/components/ui/toaster";
-import { createRoot } from "react-dom/client";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -15,6 +12,7 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import About from "./pages/About";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 // End User Pages
@@ -24,7 +22,9 @@ import Goal from "./pages/app/Goal";
 import Session from "./pages/app/Session";
 import Log from "./pages/app/Log";
 import Challenges from "./pages/app/Challenges";
+import Community from "./pages/app/Community";
 import Profile from "./pages/app/Profile";
+import KickoffSurvey from "./pages/app/KickoffSurvey";
 
 // Coach Pages
 import CoachDashboard from "./pages/coach/Dashboard";
@@ -60,14 +60,17 @@ const AppContent = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/about" element={<About />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
           {/* End User Routes */}
+          <Route path="/app/kickoff-survey" element={<KickoffSurvey />} />
           <Route path="/app/onboarding" element={<Onboarding />} />
           <Route path="/app/goal" element={<Goal />} />
           <Route path="/app/dashboard" element={<EndUserDashboard />} />
           <Route path="/app/session" element={<Session />} />
           <Route path="/app/log" element={<Log />} />
           <Route path="/app/challenges" element={<Challenges />} />
+          <Route path="/app/community" element={<Community />} />
           <Route path="/app/profile" element={<Profile />} />
 
           {/* Coach Routes */}
@@ -112,4 +115,4 @@ const App = () => (
   </QueryClientProvider>
 );
 
-createRoot(document.getElementById("root")!).render(<App />);
+export default App;

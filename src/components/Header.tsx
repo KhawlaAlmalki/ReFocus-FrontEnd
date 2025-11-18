@@ -57,6 +57,9 @@ export const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
             <Link to="/app/log" className="text-foreground hover:text-primary font-medium">
               Session Log
             </Link>
+            <Link to="/app/Community" className="text-foreground hover:text-primary font-medium">
+              Community
+            </Link>
           </>
         );
       case 'coach':

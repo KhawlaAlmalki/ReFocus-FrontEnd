@@ -45,9 +45,9 @@ export const Footer: React.FC = () => {
             <h4 className="font-semibold mb-4 text-foreground">Legal</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary">
+                <Link to="/privacy-policy" className="text-muted-foreground hover:text-primary">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary">
