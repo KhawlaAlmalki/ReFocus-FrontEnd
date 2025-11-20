@@ -1,28 +1,29 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '../contexts/AuthContext';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Card } from '../components/ui/card';
-import { Checkbox } from '../components/ui/checkbox';
-import { UserRole } from '../hooks/useAuth';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { UserRole } from "@/hooks/useAuth";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../components/ui/select';
-import { toast } from 'sonner';
-import { ArrowRight } from 'lucide-react';
+} from "@/components/ui/select";
+import { toast } from "sonner";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuthContext();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState<UserRole>('end-user');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState<UserRole>("end-user");
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -30,8 +31,8 @@ export default function Login() {
     e.preventDefault();
     const newErrors: { [key: string]: string } = {};
 
-    if (!email) newErrors.email = 'Email is required';
-    if (!password) newErrors.password = 'Password is required';
+    if (!email) newErrors.email = "Email is required";
+    if (!password) newErrors.password = "Password is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -40,23 +41,23 @@ export default function Login() {
 
     setErrors({});
     login(email, password, role);
-    toast.success('Logged in successfully!');
+    toast.success("Logged in successfully!");
 
     switch (role) {
-      case 'end-user':
-        navigate('/app/dashboard');
+      case "end-user":
+        navigate("/app/dashboard");
         break;
-      case 'coach':
-        navigate('/coach/dashboard');
+      case "coach":
+        navigate("/coach/dashboard");
         break;
-      case 'admin':
-        navigate('/admin/users');
+      case "admin":
+        navigate("/admin/users");
         break;
-      case 'developer':
-        navigate('/dev/games');
+      case "developer":
+        navigate("/dev/games");
         break;
       default:
-        navigate('/');
+        navigate("/");
     }
   };
 
@@ -86,7 +87,9 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email Field */}
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-sm font-semibold">Email Address</Label>
+            <Label htmlFor="email" className="text-sm font-semibold">
+              Email Address
+            </Label>
             <Input
               id="email"
               type="email"
@@ -94,44 +97,79 @@ export default function Login() {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                if (errors.email) setErrors({ ...errors, email: '' });
+                if (errors.email) setErrors({ ...errors, email: "" });
               }}
               className={`rounded-xl py-3 px-4 transition-all duration-200 ${
-                errors.email ? 'border-destructive bg-destructive/5' : 'hover:border-primary/30 focus:border-primary'
+                errors.email
+                  ? "border-destructive bg-destructive/5"
+                  : "hover:border-primary/30 focus:border-primary"
               }`}
             />
-            {errors.email && <p className="text-destructive text-sm font-medium">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-destructive text-sm font-medium">
+                {errors.email}
+              </p>
+            )}
           </div>
 
           {/* Password Field */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password" className="text-sm font-semibold">Password</Label>
-              <a href="#" className="text-sm text-primary hover:text-primary/80 transition-colors">
+              <Label htmlFor="password" className="text-sm font-semibold">
+                Password
+              </Label>
+              <a
+                href="#"
+                className="text-sm text-primary hover:text-primary/80 transition-colors"
+              >
                 Forgot?
               </a>
             </div>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                if (errors.password) setErrors({ ...errors, password: '' });
-              }}
-              className={`rounded-xl py-3 px-4 transition-all duration-200 ${
-                errors.password ? 'border-destructive bg-destructive/5' : 'hover:border-primary/30 focus:border-primary'
-              }`}
-            />
-            {errors.password && <p className="text-destructive text-sm font-medium">{errors.password}</p>}
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errors.password) setErrors({ ...errors, password: "" });
+                }}
+                className={`rounded-xl py-3 px-4 pr-12 transition-all duration-200 ${
+                  errors.password
+                    ? "border-destructive bg-destructive/5"
+                    : "hover:border-primary/30 focus:border-primary"
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="text-destructive text-sm font-medium">
+                {errors.password}
+              </p>
+            )}
           </div>
 
           {/* Role Selector */}
           <div className="space-y-2">
-            <Label htmlFor="role" className="text-sm font-semibold">Login As</Label>
-            <Select value={role} onValueChange={(value) => setRole(value as UserRole)}>
-              <SelectTrigger id="role" className="rounded-xl py-3 px-4 transition-all duration-200 hover:border-primary/30">
+            <Label htmlFor="role" className="text-sm font-semibold">
+              Login As
+            </Label>
+            <Select
+              value={role}
+              onValueChange={(value) => setRole(value as UserRole)}
+            >
+              <SelectTrigger
+                id="role"
+                className="rounded-xl py-3 px-4 transition-all duration-200 hover:border-primary/30"
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -150,7 +188,10 @@ export default function Login() {
               checked={rememberMe}
               onCheckedChange={(checked) => setRememberMe(checked as boolean)}
             />
-            <Label htmlFor="remember" className="font-normal cursor-pointer text-sm">
+            <Label
+              htmlFor="remember"
+              className="font-normal cursor-pointer text-sm"
+            >
               Remember me
             </Label>
           </div>
@@ -168,8 +209,11 @@ export default function Login() {
         {/* Footer Links */}
         <div className="mt-8 pt-8 border-t border-border/50 text-center text-sm">
           <p className="text-muted-foreground">
-            Don't have an account?{' '}
-            <Link to="/signup" className="text-primary font-semibold hover:text-primary/80 transition-colors">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-primary font-semibold hover:text-primary/80 transition-colors"
+            >
               Sign up
             </Link>
           </p>
