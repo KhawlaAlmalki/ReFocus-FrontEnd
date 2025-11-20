@@ -22,6 +22,7 @@ export interface SurveyAnswers {
   consistency: number;
 }
 
+
 export default function KickoffSurvey() {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
