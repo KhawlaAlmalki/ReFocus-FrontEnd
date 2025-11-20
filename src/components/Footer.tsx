@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export const Footer: React.FC = () => {
   return (
@@ -15,12 +15,18 @@ export const Footer: React.FC = () => {
             <h4 className="font-semibold mb-4 text-foreground">Product</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/about" className="text-muted-foreground hover:text-primary">
+                <Link
+                  to="/about"
+                  className="text-muted-foreground hover:text-primary"
+                >
                   How it Works
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-muted-foreground hover:text-primary">
+                <Link
+                  to="/"
+                  className="text-muted-foreground hover:text-primary"
+                >
                   Features
                 </Link>
               </li>
@@ -30,12 +36,18 @@ export const Footer: React.FC = () => {
             <h4 className="font-semibold mb-4 text-foreground">Company</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/about" className="text-muted-foreground hover:text-primary">
+                <Link
+                  to="/about"
+                  className="text-muted-foreground hover:text-primary"
+                >
                   About
                 </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary">
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-primary"
+                >
                   Contact
                 </a>
               </li>
@@ -45,12 +57,18 @@ export const Footer: React.FC = () => {
             <h4 className="font-semibold mb-4 text-foreground">Legal</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/privacy-policy" className="text-muted-foreground hover:text-primary">
+                <Link
+                  to="/privacy-policy"
+                  className="text-muted-foreground hover:text-primary"
+                >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary">
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-primary"
+                >
                   Terms of Service
                 </a>
               </li>
