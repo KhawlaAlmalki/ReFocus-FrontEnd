@@ -27,3 +27,16 @@ const sessionDurationData = [
 ];
 
 const COLORS = ['#0c2d59', '#6e94ac', '#d4a574', '#5b7c99'];
+
+export default function DeveloperAnalytics() {
+  const [selectedGame, setSelectedGame] = useState('all');
+  const [timeRange, setTimeRange] = useState('month');
+
+  const totalPlays = gamePerformanceData.reduce(
+    (sum, month) => sum + month['Focus Quest'] + month['Zen Garden'] + month['Memory Match'],
+    0
+  );
+  const avgRating = 4.7;
+  const activeUsers = 1245;
+  const avgSessionDuration = 24;
+}
