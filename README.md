@@ -122,3 +122,22 @@ npm run dev
 After running the dev server, the application will be available at:
 
 http://localhost:5173/
+
+## **Tech Stack & Dependencies**
+
+ReFocus is built using a modern React-based frontend stack to ensure fast performance and a clean developer experience.
+
+### **Frameworks & Core Tools**
+- **React + TypeScript** — Core framework for building the user interface.
+- **Vite** — Development server and bundler used to run and build the project.
+- **Tailwind CSS** — Utility-first CSS framework used for styling and layout.
+
+### **Additional Dependencies**
+- **lucide-react** — Icon library used throughout the UI.
+- **sonner** — Lightweight toast notification system.
+- **tailwind-merge** — Utility for merging Tailwind classes.
+- **class-variance-authority (cva)** — For building reusable UI component variants.
+- **localStorage (native)** — Used through `AuthContext` to manage session data on the frontend.
+
+These libraries collectively support a clean workflow, reusable components, and a responsive user interface.
+
