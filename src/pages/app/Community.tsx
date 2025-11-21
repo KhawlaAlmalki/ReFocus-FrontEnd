@@ -1,546 +1,415 @@
-import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { useState } from 'react';
+import { Button } from 'src/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from 'src/components/ui/card';
+import { Input } from 'src/components/ui/input';
+import { Textarea } from 'src/components/ui/textarea';
+import { Badge } from 'src/components/ui/badge';
+import { Progress } from 'src/components/ui/progress';
 import {
-  Users,
-  Globe2,
-  Crown,
-  Timer,
-  UserPlus,
-  Check,
-  Sparkles,
-  ArrowUpRight,
-} from "lucide-react";
+    Heart,
+    MessageCircle,
+    Flag,
+    Plus,
+    Smile,
+    Tag,
+    Users,
+    Flame,
+    AlertCircle,
+    MapPin,
+} from 'lucide-react';
 
-interface LeaderboardUser {
-  id: number;
-  name: string;
-  username: string;
-  avatarInitials: string;
-  totalHours: number;
-  isYou?: boolean;
+interface CommunityPost {
+    id: string;
+    authorName: string;
+    authorAvatar: string;
+    timestamp: string;
+    content: string;
+    tags: string[];
+    likes: number;
+    comments: number;
+    liked: boolean;
 }
 
-// Mock data for friends leaderboard
-const mockFriends: LeaderboardUser[] = [
-  {
-    id: 1,
-    name: "You",
-    username: "@raghad",
-    avatarInitials: "RA",
-    totalHours: 124.5,
-    isYou: true,
-  },
-  {
-    id: 2,
-    name: "Khawlah Almalki",
-    username: "@khawla",
-    avatarInitials: "KA",
-    totalHours: 110.2,
-  },
-  {
-    id: 3,
-    name: "Aleen Alghamdi",
-    username: "@aleen",
-    avatarInitials: "AA",
-    totalHours: 97.8,
-  },
-  {
-    id: 4,
-    name: "Shahad Alhasan",
-    username: "@shahad",
-    avatarInitials: "SA",
-    totalHours: 82.1,
-  },
-  {
-    id: 5,
-    name: "Abeer Alqahtani",
-    username: "@Abeer",
-    avatarInitials: "AB",
-    totalHours: 65.4,
-  },
+interface Challenge {
+    id: string;
+    title: string;
+    progress: number;
+    participants: number;
+}
+
+interface Coach {
+    id: string;
+    name: string;
+    specialization: string;
+    avatar: string;
+}
+
+const mockPosts: CommunityPost[] = [
+    {
+        id: '1',
+        authorName: 'Sarah Chen',
+        authorAvatar: '👩‍💼',
+        timestamp: '2 hours ago',
+        content: 'Just completed my 2-hour deep work session! Using the Pomodoro technique + Focus Quest game really helped me stay on track. Feeling pumped! 🎯',
+        tags: ['#Study', '#DeepWork', '#Productivity'],
+        likes: 24,
+        comments: 5,
+        liked: false,
+    },
+    {
+        id: '2',
+        authorName: 'Marcus Johnson',
+        authorAvatar: '👨‍💼',
+        timestamp: '4 hours ago',
+        content: 'Struggling today with social media distractions. Already scrolled through TikTok 3 times this morning. Going to use the digital detox challenge to help me reset.',
+        tags: ['#Struggling', '#Focus', '#DigitalWellness'],
+        likes: 12,
+        comments: 8,
+        liked: false,
+    },
+    {
+        id: '3',
+        authorName: 'Emma Rodriguez',
+        authorAvatar: '👩‍🎓',
+        timestamp: '6 hours ago',
+        content: 'Pro tip: I start my day with a 5-minute Zen Garden session to calm my mind before tackling work. Sets the right mental state for focus. Highly recommend! 🧘',
+        tags: ['#Tips', '#Wellness', '#Morning Routine'],
+        likes: 156,
+        comments: 32,
+        liked: false,
+    },
 ];
 
-// Mock data for global leaderboard
-const mockGlobal: LeaderboardUser[] = [
-  {
-    id: 1,
-    name: "You",
-    username: "@raghad",
-    avatarInitials: "RA",
-    totalHours: 124.5,
-    isYou: true,
-  },
-  {
-    id: 6,
-    name: "Focus Ninja",
-    username: "@deepwork",
-    avatarInitials: "FN",
-    totalHours: 210.3,
-  },
-  {
-    id: 7,
-    name: "Zen Coder",
-    username: "@zenmode",
-    avatarInitials: "ZC",
-    totalHours: 198.7,
-  },
-  {
-    id: 8,
-    name: "Study Storm",
-    username: "@storm",
-    avatarInitials: "SS",
-    totalHours: 176.9,
-  },
-  {
-    id: 9,
-    name: "No-Scroll Queen",
-    username: "@nosocial",
-    avatarInitials: "NQ",
-    totalHours: 160.4,
-  },
-  {
-    id: 10,
-    name: "Midnight Owl",
-    username: "@nightfocus",
-    avatarInitials: "MO",
-    totalHours: 145.2,
-  },
+const mockChallenges: Challenge[] = [
+    {
+        id: '1',
+        title: '7-Day Focus Streak',
+        progress: 5,
+        participants: 2341,
+    },
+    {
+        id: '2',
+        title: 'No Social Media after 10PM',
+        progress: 3,
+        participants: 1856,
+    },
+    {
+        id: '3',
+        title: 'Phone-Free Mornings',
+        progress: 6,
+        participants: 1203,
+    },
+];
+
+const mockCoaches: Coach[] = [
+    {
+        id: '1',
+        name: 'Dr. Alex Mitchell',
+        specialization: 'ADHD & Focus',
+        avatar: '👨‍⚕️',
+    },
+    {
+        id: '2',
+        name: 'Priya Patel',
+        specialization: 'Study Skills',
+        avatar: '👩‍🏫',
+    },
 ];
 
 export default function Community() {
-  const [friends] = useState<LeaderboardUser[]>(mockFriends);
-  const [globalUsers] = useState<LeaderboardUser[]>(mockGlobal);
+    const [posts, setPosts] = useState<CommunityPost[]>(mockPosts);
+    const [newPost, setNewPost] = useState('');
+    const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
+    const [activeTab, setActiveTab] = useState('feed');
 
-  // Who you clicked "Start session" with
-  const [selectedFriend, setSelectedFriend] = useState<LeaderboardUser | null>(
-    null,
-  );
-  const [isSessionModalOpen, setIsSessionModalOpen] = useState(false);
+    const handlePost = () => {
+        if (newPost.trim()) {
+            const post: CommunityPost = {
+                id: Date.now().toString(),
+                authorName: 'You',
+                authorAvatar: '👤',
+                timestamp: 'just now',
+                content: newPost,
+                tags: [],
+                likes: 0,
+                comments: 0,
+                liked: false,
+            };
+            setPosts([post, ...posts]);
+            setNewPost('');
+        }
+    };
 
-  // Global connection requests state
-  const [connectionRequests, setConnectionRequests] = useState<
-    Record<number, boolean>
-  >({});
+    const handleLike = (postId: string) => {
+        const newLiked = new Set(likedPosts);
+        if (newLiked.has(postId)) {
+            newLiked.delete(postId);
+        } else {
+            newLiked.add(postId);
+        }
+        setLikedPosts(newLiked);
 
-  const sortedFriends = useMemo(
-    () => [...friends].sort((a, b) => b.totalHours - a.totalHours),
-    [friends],
-  );
+        setPosts(
+            posts.map((post) =>
+                post.id === postId
+                    ? {
+                        ...post,
+                        likes: newLiked.has(postId) ? post.likes + 1 : post.likes - 1,
+                        liked: newLiked.has(postId),
+                    }
+                    : post
+            )
+        );
+    };
 
-  const sortedGlobal = useMemo(
-    () => [...globalUsers].sort((a, b) => b.totalHours - a.totalHours),
-    [globalUsers],
-  );
-
-  const youInFriends = sortedFriends.find((u) => u.isYou);
-  const youInGlobal = sortedGlobal.find((u) => u.isYou);
-  const yourFriendsRank =
-    youInFriends !== undefined ? sortedFriends.indexOf(youInFriends) + 1 : "-";
-  const yourGlobalRank =
-    youInGlobal !== undefined ? sortedGlobal.indexOf(youInGlobal) + 1 : "-";
-
-  const handleOpenSessionModal = (friend: LeaderboardUser) => {
-    setSelectedFriend(friend);
-    setIsSessionModalOpen(true);
-  };
-
-  const handleConfirmSession = () => {
-    if (selectedFriend) {
-      // later you can navigate or call backend here
-      console.log("Starting focus session with:", selectedFriend.username);
-    }
-    setIsSessionModalOpen(false);
-    setSelectedFriend(null);
-  };
-
-  const handleCancelSession = () => {
-    setIsSessionModalOpen(false);
-    setSelectedFriend(null);
-  };
-
-  const handleSendConnectionRequest = (user: LeaderboardUser) => {
-    if (user.isYou) return;
-    setConnectionRequests((prev) => ({
-      ...prev,
-      [user.id]: true,
-    }));
-    // later: call backend / API here
-  };
-
-  return (
-    <div className="min-h-screen bg-white py-16 md:py-24">
-      <div className="container mx-auto px-4 md:px-8">
-        {/* Header */}
-        <div className="mb-12 md:mb-16 text-center">
-          <p className="text-secondary font-semibold tracking-wide mb-3 uppercase text-sm">
-            Your Focus Community
-          </p>
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 md:mb-6 leading-tight">
-            Community & Leaderboards
-          </h1>
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            See how your focus stacks up against friends and the global ReFocus
-            community. Celebrate the wins, challenge each other, and start
-            shared focus sessions.
-          </p>
-        </div>
-
-        {/* Your stats summary */}
-        <div className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="border-0 shadow-md bg-gradient-to-br from-primary/5 to-secondary/5">
-            <CardContent className="p-6 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase text-secondary mb-1">
-                  Your Focus Hours
-                </p>
-                <p className="text-3xl font-bold">
-                  {youInFriends ? youInFriends.totalHours.toFixed(1) : "—"}
-                  <span className="text-sm text-muted-foreground ml-1">
-                    hrs
-                  </span>
-                </p>
-              </div>
-              <div className="p-3 rounded-2xl bg-primary text-primary-foreground">
-                <Timer className="w-6 h-6" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-6 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase text-secondary mb-1">
-                  Friends Rank
-                </p>
-                <p className="text-3xl font-bold">
-                  #{yourFriendsRank}
-                  <span className="text-sm text-muted-foreground ml-1">
-                    of {sortedFriends.length}
-                  </span>
-                </p>
-              </div>
-              <div className="p-3 rounded-2xl bg-muted">
-                <Users className="w-6 h-6 text-secondary" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-6 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase text-secondary mb-1">
-                  Global Rank
-                </p>
-                <p className="text-3xl font-bold">
-                  #{yourGlobalRank}
-                  <span className="text-sm text-muted-foreground ml-1">
-                    of {sortedGlobal.length}
-                  </span>
-                </p>
-              </div>
-              <div className="p-3 rounded-2xl bg-muted">
-                <Globe2 className="w-6 h-6 text-secondary" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Tabs for leaderboards */}
-        <Tabs defaultValue="friends" className="w-full">
-          <div className="flex justify-center mb-10">
-            <TabsList className="bg-muted/40 backdrop-blur-sm p-1 rounded-full inline-flex gap-1 border border-muted">
-              <TabsTrigger
-                value="friends"
-                className="px-6 py-2 rounded-full text-sm font-semibold transition-all data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-lg flex items-center gap-2"
-              >
-                <Users className="w-4 h-4" />
-                Friends
-              </TabsTrigger>
-              <TabsTrigger
-                value="global"
-                className="px-6 py-2 rounded-full text-sm font-semibold transition-all data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-lg flex items-center gap-2"
-              >
-                <Globe2 className="w-4 h-4" />
-                Community
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
-          {/* Friends leaderboard */}
-          <TabsContent value="friends" className="space-y-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <Badge
-                  variant="outline"
-                  className="px-3 py-1 text-xs font-semibold"
-                >
-                  Friends Leaderboard
-                </Badge>
-                <span className="text-xs text-muted-foreground">
-                  Start shared focus sessions with your mutual connections.
-                </span>
-              </div>
-              <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
-                <Timer className="w-3 h-3" />
-                <span>Ranking by total focus hours</span>
-              </div>
-            </div>
-
-            <Card className="border-0 shadow-md overflow-hidden">
-              <CardContent className="p-0">
-                <div className="divide-y divide-border">
-                  {sortedFriends.map((user, index) => (
-                    <div
-                      key={user.id}
-                      className={`flex items-center justify-between px-4 md:px-6 py-4 md:py-5 transition-colors ${
-                        user.isYou ? "bg-muted/60" : "hover:bg-muted/40"
-                      }`}
-                    >
-                      {/* Left: rank + avatar + names */}
-                      <div className="flex items-center gap-4">
-                        <div className="w-8 text-sm font-semibold text-muted-foreground flex items-center justify-center">
-                          {index + 1 === 1 ? (
-                            <Crown className="w-5 h-5 text-warning" />
-                          ) : (
-                            <span>#{index + 1}</span>
-                          )}
-                        </div>
-
-                        <div className="relative">
-                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary">
-                            {user.avatarInitials}
-                          </div>
-                          {user.isYou && (
-                            <span className="absolute -bottom-1 -right-1 rounded-full bg-primary text-primary-foreground text-[9px] px-1.5 py-0.5 flex items-center gap-1">
-                              <Sparkles className="w-3 h-3" />
-                              You
-                            </span>
-                          )}
-                        </div>
-
-                        <div>
-                          <p className="text-sm md:text-base font-semibold text-foreground leading-tight">
-                            {user.name}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {user.username}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Right: hours + action */}
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <p className="text-sm md:text-base font-semibold text-foreground">
-                            {user.totalHours.toFixed(1)} hrs
-                          </p>
-                          <p className="text-[11px] text-muted-foreground uppercase tracking-wide">
-                            Focused
-                          </p>
-                        </div>
-
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="rounded-full hover:bg-primary hover:text-primary-foreground"
-                          onClick={() => handleOpenSessionModal(user)}
-                        >
-                          <Timer className="w-4 h-4" />
-                          <span className="sr-only">
-                            Start focus session with {user.name}
-                          </span>
+    return (
+        <div className="min-h-screen bg-white py-8 md:py-12">
+            <div className="container mx-auto px-4 md:px-8">
+                {/* Community Rules Banner */}
+                <div className="mb-8 p-6 rounded-2xl bg-blue-50 border border-blue-200 flex items-start gap-4">
+                    <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                        <p className="font-semibold text-blue-900 mb-1">Community Guidelines</p>
+                        <p className="text-sm text-blue-800 mb-3">
+                            Keep our community supportive and professional. Respect others' journeys and focus on growth.
+                        </p>
+                        <Button variant="outline" size="sm" className="rounded-full text-blue-600 border-blue-300 hover:bg-blue-50">
+                            View Full Guidelines
                         </Button>
-                      </div>
                     </div>
-                  ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
-          {/* Global leaderboard */}
-          <TabsContent value="global" className="space-y-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <Badge
-                  variant="outline"
-                  className="px-3 py-1 text-xs font-semibold"
-                >
-                  Global Community
-                </Badge>
-                <span className="text-xs text-muted-foreground">
-                  Connect with highly focused people from all around the world.
-                </span>
-              </div>
-              <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
-                <Globe2 className="w-3 h-3" />
-                <span>Tap the icon to send a connection request</span>
-              </div>
-            </div>
+                {/* Main Grid Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {/* Left Sidebar - User Profile */}
+                    <div className="md:col-span-1">
+                        {/* User Profile Card */}
+                        <Card className="rounded-3xl border border-border/50 shadow-sm sticky top-24 mb-6">
+                            <CardContent className="p-8">
+                                <div className="text-center mb-6">
+                                    <div className="text-6xl mb-4">👤</div>
+                                    <h3 className="text-lg font-bold text-foreground">You</h3>
+                                    <p className="text-sm text-muted-foreground">Focus Enthusiast</p>
+                                </div>
 
-            <Card className="border-0 shadow-md overflow-hidden">
-              <CardContent className="p-0">
-                <div className="divide-y divide-border">
-                  {sortedGlobal.map((user, index) => {
-                    const requested = connectionRequests[user.id] === true;
-                    const isTop = index + 1 === 1;
+                                <div className="space-y-4 py-4 border-y border-border/50">
+                                    <div>
+                                        <p className="text-xs text-muted-foreground font-semibold uppercase mb-1">
+                                            Focus Score
+                                        </p>
+                                        <p className="text-3xl font-bold text-primary">87</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-muted-foreground font-semibold uppercase mb-1">
+                                            Current Streak
+                                        </p>
+                                        <p className="text-2xl font-bold text-secondary">8 days</p>
+                                    </div>
+                                </div>
 
-                    return (
-                      <div
-                        key={user.id}
-                        className={`flex items-center justify-between px-4 md:px-6 py-4 md:py-5 transition-colors ${
-                          user.isYou ? "bg-muted/60" : "hover:bg-muted/40"
-                        }`}
-                      >
-                        {/* Left: rank + avatar + names */}
-                        <div className="flex items-center gap-4">
-                          <div className="w-8 text-sm font-semibold text-muted-foreground flex items-center justify-center">
-                            {isTop ? (
-                              <Crown className="w-5 h-5 text-warning" />
-                            ) : (
-                              <span>#{index + 1}</span>
-                            )}
-                          </div>
+                                <div className="mt-6 space-y-2">
+                                    <Button
+                                        variant={activeTab === 'feed' ? 'default' : 'outline'}
+                                        className="w-full rounded-full justify-start"
+                                        onClick={() => setActiveTab('feed')}
+                                    >
+                                        My Feed
+                                    </Button>
+                                    <Button
+                                        variant={activeTab === 'groups' ? 'default' : 'outline'}
+                                        className="w-full rounded-full justify-start"
+                                        onClick={() => setActiveTab('groups')}
+                                    >
+                                        My Groups
+                                    </Button>
+                                    <Button
+                                        variant={activeTab === 'challenges' ? 'default' : 'outline'}
+                                        className="w-full rounded-full justify-start"
+                                        onClick={() => setActiveTab('challenges')}
+                                    >
+                                        Challenges
+                                    </Button>
+                                    <Button
+                                        variant={activeTab === 'messages' ? 'default' : 'outline'}
+                                        className="w-full rounded-full justify-start"
+                                        onClick={() => setActiveTab('messages')}
+                                    >
+                                        Messages
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
 
-                          <div className="relative">
-                            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-sm font-semibold text-accent-foreground">
-                              {user.avatarInitials}
-                            </div>
-                            {user.isYou && (
-                              <span className="absolute -bottom-1 -right-1 rounded-full bg-primary text-primary-foreground text-[9px] px-1.5 py-0.5 flex items-center gap-1">
-                                <Sparkles className="w-3 h-3" />
-                                You
-                              </span>
-                            )}
-                          </div>
+                    {/* Middle Content - Feed */}
+                    <div className="md:col-span-2 lg:col-span-2">
+                        {/* Post Composer */}
+                        <Card className="rounded-3xl border border-border/50 shadow-sm mb-6">
+                            <CardContent className="p-8">
+                                <p className="font-semibold text-foreground mb-4">Share a focus win or tip…</p>
+                                <Textarea
+                                    value={newPost}
+                                    onChange={(e) => setNewPost(e.target.value)}
+                                    placeholder="What's your focus achievement or insight today?"
+                                    className="rounded-2xl mb-4 min-h-24"
+                                />
+                                <div className="flex items-center justify-between">
+                                    <div className="flex gap-2">
+                                        <Button variant="outline" size="sm" className="rounded-full gap-2">
+                                            <Smile className="w-4 h-4" />
+                                            Add Emoji
+                                        </Button>
+                                        <Button variant="outline" size="sm" className="rounded-full gap-2">
+                                            <Tag className="w-4 h-4" />
+                                            Add Tag
+                                        </Button>
+                                    </div>
+                                    <Button
+                                        onClick={handlePost}
+                                        disabled={!newPost.trim()}
+                                        className="rounded-full gap-2"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                        Post
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
 
-                          <div>
-                            <p className="text-sm md:text-base font-semibold text-foreground leading-tight">
-                              {user.name}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {user.username}
-                            </p>
-                          </div>
+                        {/* Posts Feed */}
+                        <div className="space-y-6">
+                            {posts.map((post) => (
+                                <Card
+                                    key={post.id}
+                                    className="rounded-3xl border border-border/50 shadow-sm hover:shadow-lg transition-all"
+                                >
+                                    <CardContent className="p-8">
+                                        {/* Post Header */}
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="text-3xl">{post.authorAvatar}</div>
+                                                <div>
+                                                    <p className="font-bold text-foreground">{post.authorName}</p>
+                                                    <p className="text-xs text-muted-foreground">{post.timestamp}</p>
+                                                </div>
+                                            </div>
+                                            <Button variant="ghost" size="sm" className="rounded-full">
+                                                ⋯
+                                            </Button>
+                                        </div>
+
+                                        {/* Post Content */}
+                                        <p className="text-foreground mb-4 leading-relaxed">{post.content}</p>
+
+                                        {/* Tags */}
+                                        {post.tags.length > 0 && (
+                                            <div className="flex flex-wrap gap-2 mb-6">
+                                                {post.tags.map((tag, idx) => (
+                                                    <Badge
+                                                        key={idx}
+                                                        variant="outline"
+                                                        className="rounded-full cursor-pointer hover:bg-primary/10"
+                                                    >
+                                                        {tag}
+                                                    </Badge>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* Post Actions */}
+                                        <div className="flex items-center gap-4 pt-4 border-t border-border/50 text-muted-foreground">
+                                            <button
+                                                onClick={() => handleLike(post.id)}
+                                                className="flex items-center gap-2 hover:text-primary transition-colors"
+                                            >
+                                                <Heart
+                                                    className="w-4 h-4"
+                                                    fill={likedPosts.has(post.id) ? 'currentColor' : 'none'}
+                                                    stroke={likedPosts.has(post.id) ? '#e63946' : 'currentColor'}
+                                                    color={likedPosts.has(post.id) ? '#e63946' : 'inherit'}
+                                                />
+                                                <span className="text-sm font-medium">{post.likes}</span>
+                                            </button>
+                                            <button className="flex items-center gap-2 hover:text-primary transition-colors">
+                                                <MessageCircle className="w-4 h-4" />
+                                                <span className="text-sm font-medium">{post.comments}</span>
+                                            </button>
+                                            <button className="flex items-center gap-2 ml-auto hover:text-destructive transition-colors">
+                                                <Flag className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
                         </div>
+                    </div>
 
-                        {/* Right: hours + action */}
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <p className="text-sm md:text-base font-semibold text-foreground">
-                              {user.totalHours.toFixed(1)} hrs
-                            </p>
-                            <p className="text-[11px] text-muted-foreground uppercase tracking-wide">
-                              Focused
-                            </p>
-                          </div>
+                    {/* Right Sidebar */}
+                    <div className="md:col-span-1 lg:col-span-1">
+                        {/* Trending Challenges */}
+                        <Card className="rounded-3xl border border-border/50 shadow-sm sticky top-24 mb-6">
+                            <CardHeader className="border-b border-border/50">
+                                <div className="flex items-center gap-2">
+                                    <Flame className="w-5 h-5 text-orange-500" />
+                                    <CardTitle>Trending Challenges</CardTitle>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="p-6 space-y-6">
+                                {mockChallenges.map((challenge) => (
+                                    <div key={challenge.id}>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <p className="font-semibold text-foreground text-sm">
+                                                {challenge.title}
+                                            </p>
+                                            <span className="text-xs text-muted-foreground">
+                        {challenge.participants.toLocaleString()}
+                      </span>
+                                        </div>
+                                        <Progress value={(challenge.progress / 7) * 100} className="h-2 mb-1" />
+                                        <p className="text-xs text-muted-foreground">
+                                            {challenge.progress}/7 completed
+                                        </p>
+                                    </div>
+                                ))}
+                                <Button variant="outline" className="w-full rounded-full mt-4">
+                                    View All Challenges
+                                </Button>
+                            </CardContent>
+                        </Card>
 
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            disabled={user.isYou || requested}
-                            className={`rounded-full transition-all ${
-                              requested
-                                ? "text-success hover:text-success"
-                                : "hover:bg-secondary hover:text-secondary-foreground"
-                            }`}
-                            onClick={() => handleSendConnectionRequest(user)}
-                          >
-                            {requested ? (
-                              <Check className="w-4 h-4" />
-                            ) : (
-                              <UserPlus className="w-4 h-4" />
-                            )}
-                            <span className="sr-only">
-                              {requested
-                                ? `Connection request already sent to ${user.name}`
-                                : `Send connection request to ${user.name}`}
-                            </span>
-                          </Button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                        {/* Suggested Coaches */}
+                        <Card className="rounded-3xl border border-border/50 shadow-sm">
+                            <CardHeader className="border-b border-border/50">
+                                <div className="flex items-center gap-2">
+                                    <Users className="w-5 h-5 text-primary" />
+                                    <CardTitle>Suggested Coaches</CardTitle>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="p-6 space-y-4">
+                                {mockCoaches.map((coach) => (
+                                    <div
+                                        key={coach.id}
+                                        className="p-4 rounded-2xl bg-muted/30 border border-border/50"
+                                    >
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <div className="text-2xl">{coach.avatar}</div>
+                                            <div className="flex-1">
+                                                <p className="font-bold text-foreground text-sm">{coach.name}</p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {coach.specialization}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <Button variant="outline" size="sm" className="w-full rounded-full">
+                                            View Profile
+                                        </Button>
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        {/* CTA bottom */}
-        <div className="mt-16 md:mt-20 text-center">
-          <div className="bg-gradient-to-r from-primary to-secondary rounded-3xl p-10 md:p-14 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-left">
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">
-                Turn your focus into a team sport.
-              </h2>
-              <p className="text-sm md:text-base opacity-90 max-w-xl">
-                Invite friends, start shared sessions, and climb the
-                leaderboards together. Tiny consistent focus blocks → huge
-                long-term change.
-              </p>
             </div>
-            <Button className="bg-white text-primary hover:bg-white/90 rounded-full px-8 py-3 text-sm md:text-base font-semibold inline-flex items-center gap-2">
-              Explore Challenges
-              <ArrowUpRight className="w-4 h-4" />
-            </Button>
-          </div>
         </div>
-
-        {/* Simple custom modal for starting a focus session */}
-        {isSessionModalOpen && selectedFriend && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-            <div className="bg-background rounded-3xl shadow-xl max-w-md w-full mx-4 p-6 md:p-8 relative">
-              <div className="mb-4">
-                <h3 className="text-xl md:text-2xl font-bold mb-2">
-                  Start a focus session?
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  You&apos;re about to start a shared focus session with{" "}
-                  <span className="font-semibold text-foreground">
-                    {selectedFriend.name}
-                  </span>{" "}
-                  {selectedFriend.isYou ? "(yes, that’s you 🤍)" : ""}. You can
-                  later decide how long the session will be inside the focus
-                  screen.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary">
-                  {selectedFriend.avatarInitials}
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">
-                    {selectedFriend.username}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Total focus: {selectedFriend.totalHours.toFixed(1)} hrs
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-3">
-                <Button variant="ghost" onClick={handleCancelSession}>
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleConfirmSession}
-                  className="inline-flex items-center gap-2"
-                >
-                  <Timer className="w-4 h-4" />
-                  Start Session
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+    );
 }
