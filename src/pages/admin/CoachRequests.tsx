@@ -34,7 +34,7 @@ const mockRequests: CoachRequest[] = [
     name: 'Emma Wilson',
     email: 'emma@example.com',
     experience: '8 years of corporate training and professional development',
-    bio: 'Former HR manager passionate about helping professionals develop focus and productivity habits.',
+    bio: 'Former manager passionate about helping professionals develop focus and productivity habits.',
     specialization: 'Professional Development, Deep Work',
     menteeCount: 0,
     submittedDate: '2024-01-12',
