@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Zap, Target, Trophy, Clock, ArrowRight, ChevronRight } from 'lucide-react';
-
+import { useAuthContext } from '@/contexts/AuthContext';
 // Mock data
 const mockSessions = [
   { id: 1, date: '2024-01-15', startTime: '09:00 AM', duration: 45, category: 'Study', status: 'completed' },
@@ -19,7 +19,8 @@ const mockChallenges = [
 ];
 
 export default function EndUserDashboard() {
-  const [userName] = useState('Khawla');
+  const { user } = useAuthContext();
+  const userName = user?.name ?? 'Friend';
   const todayDate = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
