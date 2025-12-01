@@ -1,0 +1,43 @@
+### Health Check
+GET http://localhost:5000/api/health
+
+### Get All Users
+GET http://localhost:5000/api/users
+Content-Type: application/json
+
+### Create User
+POST http://localhost:5000/api/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+### Login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+### Get User by ID (with auth token)
+GET http://localhost:5000/api/users/123
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+### Update User
+PUT http://localhost:5000/api/users/123
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+{
+  "name": "John Updated"
+}
+
+### Delete User
+DELETE http://localhost:5000/api/users/123
+Authorization: Bearer YOUR_TOKEN_HERE
