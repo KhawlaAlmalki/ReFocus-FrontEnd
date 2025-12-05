@@ -9,29 +9,54 @@ export const login = async (req, res) => {
 
     // Validation
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required"
+      });
     }
 
-    // Find user by email
-    const user = await User.findOne({ email });
+    // Find user by email (case-insensitive)
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password"
+      });
+    }
+
+    // Verify password first (before checking other conditions for security)
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password"
+      });
+    }
+
+    // Check if email is verified
+    if (!user.isEmailVerified) {
+      return res.status(403).json({
+        success: false,
+        message: "Please verify your email before logging in",
+        needsVerification: true,
+        email: user.email
+      });
     }
 
     // Check if account is active
     if (!user.isActive) {
-      return res.status(403).json({ message: "Account is deactivated. Contact support." });
+      return res.status(403).json({
+        success: false,
+        message: "Your account has been deactivated. Please contact support."
+      });
     }
 
     // Check if account is banned
     if (user.isBanned) {
-      return res.status(403).json({ message: "Account is banned. Contact support." });
-    }
-
-    // Verify password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(403).json({
+        success: false,
+        message: "Your account has been banned. Please contact support."
+      });
     }
 
     // Update login tracking
@@ -52,6 +77,7 @@ export const login = async (req, res) => {
 
     // Return user data (password excluded via toJSON method)
     res.status(200).json({
+      success: true,
       message: "Login successful",
       token,
       user: {
@@ -59,7 +85,8 @@ export const login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        avatar: user.avatar,
+        isVerified: user.isEmailVerified,
+        profilePicture: user.avatar,
         bio: user.bio,
         isApprovedCoach: user.isApprovedCoach,
         isPendingCoach: user.isPendingCoach,
@@ -72,6 +99,7 @@ export const login = async (req, res) => {
   } catch (err) {
     console.error("LOGIN ERROR:", err);
     res.status(500).json({
+      success: false,
       message: "Server error during login",
       error: err.message
     });

@@ -20,15 +20,21 @@ app.use(cors(corsOptions));
 // Accept JSON requests
 app.use(express.json());
 
+// Serve static files from uploads directory
+app.use('/uploads', express.static('uploads'));
+
 // ----------------------
 // MONGO CONNECTION
 // ----------------------
 const connectDB = async () => {
   try {
     console.log("Attempting to connect to MongoDB...");
-    console.log("MONGO_URI:", process.env.MONGO_URI ? "✓ Found" : "✗ Missing");
+    const mongoUri = process.env.NODE_ENV === 'test'
+      ? process.env.MONGODB_TEST_URI
+      : process.env.MONGO_URI;
+    console.log("MONGO_URI:", mongoUri ? "✓ Found" : "✗ Missing");
 
-    await mongoose.connect(process.env.MONGO_URI, {
+    await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 5000,
     });
 
@@ -36,11 +42,16 @@ const connectDB = async () => {
   } catch (err) {
     console.error("✗ MongoDB Connection Error:", err.message);
     console.error("Full error:", err);
-    process.exit(1);
+    if (process.env.NODE_ENV !== 'test') {
+      process.exit(1);
+    }
   }
 };
 
-connectDB();
+// Connect to database (will be handled by tests in test environment)
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 // Handle connection events
 mongoose.connection.on('disconnected', () => {
@@ -87,8 +98,19 @@ app.use("/api/sessions", auth, sessionRoutes);
 import surveyRoutes from "./src/routes/survey.js";
 app.use("/api/survey", auth, surveyRoutes);
 
+import devRoutes from "./src/routes/dev.js";
+app.use("/api/dev", auth, devRoutes);
+
 // ----------------------
 // START SERVER
 // ----------------------
 const PORT = process.env.APP_PORT || 5050;
-app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+
+// Only start server if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+}
+
+// Export app and connectDB for testing
+export default app;
+export { connectDB };

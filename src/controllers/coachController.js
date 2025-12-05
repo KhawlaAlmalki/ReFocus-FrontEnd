@@ -2,6 +2,7 @@
 import User from "../models/User.js";
 import CoachRequest from "../models/CoachRequest.js";
 import CoachProfile from "../models/CoachProfile.js";
+import { sendCoachApprovalEmail, sendCoachRejectionEmail } from "../utils/emailService.js";
 
 export const applyToBeCoach = async (req, res) => {
   try {
@@ -190,6 +191,14 @@ export const approveApplication = async (req, res) => {
     user.coachProfileId = coachProfile._id;
     await user.save();
 
+    // Send approval email notification
+    try {
+      await sendCoachApprovalEmail(user.email, user.name);
+    } catch (emailError) {
+      console.error('Failed to send approval email:', emailError);
+      // Continue even if email fails - don't block the approval
+    }
+
     res.status(200).json({
       message: "Coach application approved successfully",
       coachProfile: {
@@ -237,6 +246,14 @@ export const rejectApplication = async (req, res) => {
     user.isPendingCoach = false;
     user.isApprovedCoach = false;
     await user.save();
+
+    // Send rejection email notification
+    try {
+      await sendCoachRejectionEmail(user.email, user.name, rejectionReason);
+    } catch (emailError) {
+      console.error('Failed to send rejection email:', emailError);
+      // Continue even if email fails - don't block the rejection
+    }
 
     res.status(200).json({
       message: "Coach application rejected",
