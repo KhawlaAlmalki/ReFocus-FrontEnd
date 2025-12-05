@@ -1,0 +1,281 @@
+###
+# ReFocus Authentication API Tests
+# Use with REST Client extension in VS Code
+# Base URL: http://localhost:5050
+###
+
+@baseUrl = http://localhost:5050
+@contentType = application/json
+
+### Variables (will be set from responses)
+@authToken =
+@verificationToken =
+
+###############################################################################
+# 1. USER REGISTRATION
+###############################################################################
+
+### Register a new user (Success)
+# @name registerUser
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Test User",
+  "email": "testuser@example.com",
+  "password": "Test@123456"
+}
+
+### Register user with weak password (Should fail)
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Weak Password User",
+  "email": "weak@example.com",
+  "password": "12345"
+}
+
+### Register user with existing email (Should fail)
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Duplicate User",
+  "email": "testuser@example.com",
+  "password": "Test@123456"
+}
+
+###############################################################################
+# 2. LOGIN - UNVERIFIED EMAIL
+###############################################################################
+
+### Login with unverified email (Should fail with 403)
+# @name loginUnverified
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "testuser@example.com",
+  "password": "Test@123456"
+}
+
+### Login with wrong password (Should fail with 401)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "testuser@example.com",
+  "password": "WrongPassword123"
+}
+
+### Login with non-existent email (Should fail with 401)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "nonexistent@example.com",
+  "password": "Test@123456"
+}
+
+###############################################################################
+# 3. EMAIL VERIFICATION
+###############################################################################
+
+### Verify email with token
+# Note: Replace {token} with actual verification token from database or email
+GET {{baseUrl}}/api/auth/verify-email/YOUR_VERIFICATION_TOKEN_HERE
+
+### Verify email with invalid token (Should fail)
+GET {{baseUrl}}/api/auth/verify-email/invalid-token-123
+
+###############################################################################
+# 4. RESEND VERIFICATION EMAIL
+###############################################################################
+
+### Resend verification email
+POST {{baseUrl}}/api/auth/resend-verification
+Content-Type: {{contentType}}
+
+{
+  "email": "testuser@example.com"
+}
+
+### Resend verification for already verified user (Should fail)
+POST {{baseUrl}}/api/auth/resend-verification
+Content-Type: {{contentType}}
+
+{
+  "email": "alice@example.com"
+}
+
+### Resend verification for non-existent email (Should fail)
+POST {{baseUrl}}/api/auth/resend-verification
+Content-Type: {{contentType}}
+
+{
+  "email": "nonexistent@example.com"
+}
+
+###############################################################################
+# 5. LOGIN - VERIFIED USER
+###############################################################################
+
+### Login with verified user (Success)
+# @name loginSuccess
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "alice@example.com",
+  "password": "Alice@12345"
+}
+
+### Extract token from response
+@authToken = {{loginSuccess.response.body.token}}
+
+###############################################################################
+# 6. GET CURRENT USER (Protected Route)
+###############################################################################
+
+### Get current user profile (with valid token)
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{authToken}}
+
+### Get current user without token (Should fail with 403)
+GET {{baseUrl}}/api/auth/me
+
+### Get current user with invalid token (Should fail with 401)
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer invalid-token-here
+
+###############################################################################
+# 7. LOGOUT (Protected Route)
+###############################################################################
+
+### Logout user (with valid token)
+POST {{baseUrl}}/api/auth/logout
+Authorization: Bearer {{authToken}}
+
+### Logout without token (Should fail with 403)
+POST {{baseUrl}}/api/auth/logout
+
+###############################################################################
+# 8. ADDITIONAL TEST CASES
+###############################################################################
+
+### Login with missing email
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "password": "Test@123456"
+}
+
+### Login with missing password
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "testuser@example.com"
+}
+
+### Register with invalid email format
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Invalid Email User",
+  "email": "not-an-email",
+  "password": "Test@123456"
+}
+
+### Register with short name
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "A",
+  "email": "shortname@example.com",
+  "password": "Test@123456"
+}
+
+###############################################################################
+# 9. COMPLETE SUCCESS FLOW
+###############################################################################
+
+### Step 1: Register new user
+# @name newUser
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Complete Flow User",
+  "email": "flowtest@example.com",
+  "password": "Flow@Test123"
+}
+
+### Step 2: Try to login (should fail - email not verified)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "flowtest@example.com",
+  "password": "Flow@Test123"
+}
+
+### Step 3: Resend verification email
+POST {{baseUrl}}/api/auth/resend-verification
+Content-Type: {{contentType}}
+
+{
+  "email": "flowtest@example.com"
+}
+
+### Step 4: Verify email (replace token)
+# GET {{baseUrl}}/api/auth/verify-email/TOKEN_FROM_DB
+
+### Step 5: Login successfully (after email verification)
+# @name flowLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "flowtest@example.com",
+  "password": "Flow@Test123"
+}
+
+### Step 6: Get user profile
+@flowToken = {{flowLogin.response.body.token}}
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{flowToken}}
+
+### Step 7: Logout
+POST {{baseUrl}}/api/auth/logout
+Authorization: Bearer {{flowToken}}
+
+###############################################################################
+# 10. CASE SENSITIVITY TESTS
+###############################################################################
+
+### Login with uppercase email (should work - case insensitive)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "ALICE@EXAMPLE.COM",
+  "password": "Alice@12345"
+}
+
+### Login with mixed case email (should work)
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "AlIcE@ExAmPlE.cOm",
+  "password": "Alice@12345"
+}
+
+###############################################################################
+# END OF TESTS
+###############################################################################
