@@ -1,29 +1,122 @@
-# **ReFocus – Digital Wellness Web Application**
+# 🌱 ReFocus
 
-**ReFocus** is a streamlined and user-focused digital wellness application designed to help individuals reduce distractions, maintain concentration, and develop healthier screen habits.  
-The platform offers structured focus modes, intuitive timers, and clear progress indicators that encourage consistency and support long-term productivity.  
-Built with simplicity and clarity in mind, ReFocus enables users to stay on task with minimal friction and a clean, distraction-free interface.
+**Digital Wellness & Focus Coaching Platform**
 
-## **Key Features**
+A modern web application designed to help students and professionals reduce distractions, stay focused, and build healthier screen habits through structured focus sessions, goal tracking, and personalized insights.
 
-- **Focused Work Sessions**  
-  Clean, minimal timer interface designed to help users stay fully engaged during study or work periods.
+---
 
-- **Customizable Focus Modes**  
-  Users can switch between different modes (e.g., study, deep work, reading) depending on their task.
+## 📋 Table of Contents
 
-- **Distraction Awareness**  
-  Simple logging mechanism that helps users identify patterns in their distractions over time.
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [User Roles](#-user-roles)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [API Documentation](#-api-documentation)
+- [Usage Guide](#-usage-guide)
+- [Design Resources](#-design-resources)
+- [Team](#-team)
 
-- **Session History Overview**  
-  Users can view past sessions and track improvements in consistency and productivity.
+---
 
-- **Responsive & Accessible Interface**  
-  Designed to work smoothly across devices with a clear, user-friendly layout.
+## 🎯 Overview
 
-## **Project Structure**
+### The Challenge
 
-The project follows a clean and modular folder structure to keep components, pages, and logic organized and easy to maintain.
+Many students and knowledge workers struggle with:
+- Constant digital distractions
+- Lack of structure when studying or working
+- No visibility into how they actually spend focused time
+
+### Our Solution
+
+ReFocus transforms focus time into visible progress, helping users stay accountable while giving coaches and admins better tools for monitoring and support.
+
+### Who It's For
+
+- 🎓 **Students** — Structure study and revision sessions
+- 💼 **Professionals** — Protect deep work time
+- 🧠 **Coaches/Mentors** — Monitor and support focus habits
+- 🛠 **Admins/Developers** — Manage content and configuration
+
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **Focus Sessions** | Clean, distraction-free timer interface for structured work blocks |
+| **Custom Modes** | Different modes (Study, Deep Work, Reading) to match task types |
+| **Goal Tracking** | Set and update focus goals with backend persistence |
+| **Surveys & Reflections** | Lightweight habit surveys for digital wellness insights |
+| **Session Analytics** | View history, duration, and trends to maintain consistency |
+| **Mini Games** | Optional games for attention improvement and controlled breaks |
+| **Role-Based Access** | Distinct layouts for Users, Coaches, Admins, and Developers |
+| **Modern UI** | Responsive, accessible interface built with React and Tailwind |
+
+---
+
+## 👥 User Roles
+
+### 🧑‍💻 Regular Users (Learners/Individuals)
+
+- Start focus sessions using different modes
+- Set and update personal goals
+- Complete habit surveys
+- Review session history and progress
+- Access optional focus-supporting mini games
+
+### 🎓 Coaches/Mentors
+
+- View summarized session data for assigned users
+- Track consistency and progress trends
+- Help users interpret patterns and adjust habits
+
+### 🛡 Admins
+
+- Manage user accounts (view, verify, deactivate)
+- Access admin dashboards at `/pages/admin`
+- Oversee global settings and data integrity
+
+### 🧪 Developers
+
+- Use internal dev tools at `/pages/dev`
+- Test new features and API integrations
+- Run verification endpoints for system health
+
+---
+
+## 💻 Tech Stack
+
+### Frontend
+
+| Technology | Purpose |
+|------------|---------|
+| **React + TypeScript** | Core UI framework |
+| **Vite** | Development server and bundler |
+| **Tailwind CSS** | Utility-first styling |
+| **lucide-react** | Icon library |
+| **sonner** | Toast notifications |
+| **tailwind-merge** | Class merging utility |
+| **cva** | Component variants |
+
+### Backend
+
+| Technology | Purpose |
+|------------|---------|
+| **Node.js + Express** | Server framework |
+| **MongoDB** | Database |
+| **JWT** | Authentication |
+| **Mongoose** | ODM for MongoDB |
+
+---
+
+## **🧱 Project Structure**
+### Front End
+The frontend is built with **React + TypeScript + Vite** using a modular structure:
+
 ```
 refocus-frontend/
 ├─ src/
@@ -54,90 +147,236 @@ refocus-frontend/
 ├─ tailwind.config.ts
 └─ vite.config.ts
 ```
-## **Usage Instructions**
 
-Once the application is running, users can begin interacting with the system through a simple and intuitive flow:
+### 🗄️ Back End
+The backend is built with Node.js, Express, and MongoDB:
 
-1. **Open the app** in the browser at the development URL (usually `http://localhost:5173`).
-2. **Navigate to the Landing Page** to explore available focus options.
-3. **Create an account or log in** to access personalized features.
-4. **Select a focus mode** from the available options (e.g., Study, Deep Work).
-5. **Start a focus session** using the built-in timer interface.
-6. **Review session history** to track progress and maintain consistency over time.
+```bash
+backend/
+├─ server.js                # Main Express app entry
+├─ package.json
+├─ package-lock.json
+├─ .env                     # Environment variables (not committed)
+├─ test-auth.http           # VS Code REST client samples (auth)
+├─ test-coach-profile.http  # VS Code REST client samples (coach)
+├─ test-coach-verification.http
+├─ node_modules/
+└─ src/
+   ├─ config/               # Configuration helpers (DB, etc.)
+   │  └─ ...               
+   ├─ controllers/          # Route handler logic (business logic)
+   │  ├─ authController.js
+   │  ├─ goalsController.js
+   │  ├─ sessionsController.js
+   │  ├─ surveyController.js
+   │  ├─ gamesController.js
+   │  └─ ...                # other controllers (admin, coach, etc.)
+   ├─ middleware/           # Reusable middleware
+   │  ├─ rateLimit.js       # Request rate limiting
+   │  ├─ roleCheck.js       # Role / permission checks
+   │  ├─ upload.js          # File upload handling
+   │  └─ validation.js      # Validation helpers
+   ├─ models/               # Mongoose models
+   │  ├─ User.js
+   │  ├─ Goal.js
+   │  ├─ Session.js
+   │  ├─ Survey.js
+   │  ├─ Game.js
+   │  └─ ...                # other domain models
+   ├─ routes/               # API route definitions (mounted in server.js)
+   │  ├─ admin.js
+   │  ├─ audio.js
+   │  ├─ auth.js
+   │  ├─ badges.js
+   │  ├─ challenge-templates.js
+   │  ├─ challenges.js
+   │  ├─ coach.js
+   │  ├─ community.js
+   │  ├─ dev.js
+   │  ├─ game-submissions.js
+   │  ├─ games.js
+   │  ├─ goals.js
+   │  ├─ licenses.js
+   │  ├─ mentees.js
+   │  ├─ messages.js
+   │  ├─ moderation.js
+   │  ├─ progress.js
+   │  ├─ sessions.js
+   │  ├─ survey.js
+   │  └─ users.js
+   └─ utils/                # Shared utility functions/helpers
+      └─ ...
 
-## **Team Members & Roles**
-
-This project was developed collaboratively by the following team members. Each member contributed to specific areas of the application's design, development, and documentation.
-
-- **Aleen Alghamdi** — Page Development, UI Enhancements
-- **Khawla Al-Malki** — Frontend Development, Application Structure
-- **Raghad Almaghrabi** — State Management, Contexts & Hooks
-- **Shahad Alhassan** — Styling, User Experience Flow
-
-## **Setup & Installation**
-
-Follow the steps below to install and run the ReFocus frontend successfully.
-
-### **1. Prerequisites**
-Make sure you have the following installed:
-- **Node.js (LTS recommended)**  
-- **npm** (included with Node.js)
-
-This project was originally created using **pnpm**, but it can run with both **npm** and **pnpm**.  
-Instructions for both package managers are provided below.
+```
 
 ---
 
-## **Option A — Using pnpm (Recommended)**
+## 🚀 Getting Started
 
-pnpm is the package manager used when generating the project.  
-It guarantees full compatibility with the existing lockfile.
+### Prerequisites
 
-### **Install pnpm:**
+- **Node.js** (LTS recommended)
+- **npm** or **pnpm**
+
+### Installation
+
+#### Option A: Using pnpm (Recommended)
 ```bash
+# Install pnpm globally
 npm install -g pnpm
+
+# Install dependencies
 pnpm install
+
+# Start development server
 pnpm dev
 ```
-## **Option B — Using npm (If you prefer not to install pnpm)**
 
-When using npm, some dev dependencies (like Vite) may not install automatically due to the project’s original pnpm configuration.
-If you encounter the error:
+#### Option B: Using npm
 ```bash
-sh: vite: command not found
-```
-follow the steps below:
-1. Install dependencies:
-```bash
+# Install dependencies
 npm install
-```
-2. Install Vite manually (required for npm users):
-```bash
+
+# Install Vite (if needed)
 npm install vite --save-dev
-```
-4. Run the development server:
-```bash
+
+# Start development server
 npm run dev
 ```
-After running the dev server, the application will be available at:
 
+### Access the Application
+
+Open your browser and navigate to:
 http://localhost:5173/
 
-## **Tech Stack & Dependencies**
+---
 
-ReFocus is built using a modern React-based frontend stack to ensure fast performance and a clean developer experience.
+## 📡 API Documentation
 
-### **Frameworks & Core Tools**
-- **React + TypeScript** — Core framework for building the user interface.
-- **Vite** — Development server and bundler used to run and build the project.
-- **Tailwind CSS** — Utility-first CSS framework used for styling and layout.
+### Base URL
+http://localhost:5050/api
 
-### **Additional Dependencies**
-- **lucide-react** — Icon library used throughout the UI.
-- **sonner** — Lightweight toast notification system.
-- **tailwind-merge** — Utility for merging Tailwind classes.
-- **class-variance-authority (cva)** — For building reusable UI component variants.
-- **localStorage (native)** — Used through `AuthContext` to manage session data on the frontend.
+### 🔑 Authentication
 
-These libraries collectively support a clean workflow, reusable components, and a responsive user interface.
+#### Register New User
+
+**Endpoint:** `POST /auth/register`
+
+**Request Body:**
+```json
+{
+  "name": "user",
+  "email": "user@example.com",
+  "password": "Password123"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Registration successful. Please check your email to verify your account.",
+  "user": {
+    "id": "69347ffaf3cb519b4ef4705b",
+    "name": "user",
+    "email": "user@example.com",
+    "isEmailVerified": false
+  }
+}
+```
+
+#### Login
+
+**Endpoint:** `POST /auth/login`
+
+**Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "Password123"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR...",
+  "user": {
+    "id": "665f...",
+    "name": "Raghad",
+    "email": "user@example.com"
+  }
+}
+```
+
+### Using the Token
+
+Include the token in subsequent requests:
+```bash
+Authorization: Bearer <token>
+```
+
+---
+
+## 📖 Usage Guide
+
+1. **Open the app** at `http://localhost:5173`
+2. **Navigate** to the landing page to explore focus options
+3. **Create an account** or log in to access personalized features
+4. **Select a focus mode** (Study, Deep Work, Reading, etc.)
+5. **Start a focus session** using the built-in timer
+6. **Review session history** to track progress over time
+
+### Role-Specific Access
+
+- **Coaches** — Visit coach pages to view user analytics
+- **Admins** — Access admin pages to manage users and settings
+- **Developers** — Use dev pages for testing and feature previews
+
+---
+
+## 🎨 Design Resources
+
+### Figma Wireframes
+
+View our complete UI design and wireframes:
+
+**[ReFocus UI Design on Figma →](https://www.figma.com/design/7a8aJs0gj2oPBG6WoVBQzj/html.to.design)**
+
+---
+
+## 👥 Team
+
+This project was developed collaboratively by a dedicated team of developers, each contributing their unique expertise:
+
+| Team Member  | Focus Area |
+|--------------|------------|
+| **Aleen Alghamdi** | Page Development & UI Enhancements ✨ |
+| **Khawla Al-Malki** |  Application Structure & Architecture 🏗️ |
+| **Raghad Almaghrabi** |  State Management & Contexts 🧠 |
+| **Shahad Alhassan** | Styling & User Experience 💅 |
+
+---
+
+## 📄 License
+
+This project is part of an academic/educational initiative focused on digital wellness and productivity.
+
+---
+
+## 📚 Helpful Resources
+
+* **[React Documentation](https://react.dev/)** — Official React docs and guides
+* **[TypeScript Handbook](https://www.typescriptlang.org/docs/)** — Learn TypeScript fundamentals
+* **[Vite Guide](https://vitejs.dev/guide/)** — Fast build tool documentation
+* **[Tailwind CSS](https://tailwindcss.com/docs)** — Utility-first CSS framework
+* **[Node.js Guides](https://nodejs.org/en/docs/)** — Server-side JavaScript runtime
+* **[Express.js Documentation](https://expressjs.com/)** — Web framework for Node.js
+* **[MongoDB Manual](https://www.mongodb.com/docs/manual/)** — NoSQL database documentation
+* **[Mongoose Docs](https://mongoosejs.com/docs/)** — MongoDB object modeling
+* **[JWT Introduction](https://jwt.io/introduction)** — JSON Web Tokens explained
+* **[GitHub Getting Started](https://docs.github.com/en/get-started)** — Version control basics
+
 
