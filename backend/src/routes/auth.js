@@ -1,6 +1,6 @@
 // src/routes/auth.js
 import express from "express";
-import { register, verifyEmail, resendVerification, getCurrentUser, logout } from "../controllers/authController.js";
+import { register, verifyEmail, resendVerification, getCurrentUser, updateCurrentUser, logout } from "../controllers/authController.js";
 import { login } from "../controllers/loginController.js";
 import auth from "../middleware/auth.js";
 
@@ -16,6 +16,7 @@ router.post("/resend-verification", resendVerification);
 
 // Protected routes (require authentication)
 router.get("/me", auth, getCurrentUser);
+router.put("/me", auth, updateCurrentUser);
 router.post("/logout", auth, logout);
 
 export default router;

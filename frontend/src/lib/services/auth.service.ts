@@ -8,23 +8,41 @@ export interface LoginCredentials {
 }
 
 export interface RegisterData {
-  username: string;
+  name: string;
   email: string;
   password: string;
   role?: 'user' | 'coach' | 'admin' | 'developer';
 }
 
+export interface UserProfileResponse {
+  success: boolean;
+  message: string;
+  user: User;
+}
+
+export interface UpdateProfileData {
+  name?: string;
+  email?: string;
+  goal?: string;
+}
+
 export interface AuthResponse {
-  token: string;
+  success: boolean;
+  message?: string;
+  token?: string;
   user: User;
 }
 
 export interface User {
-  _id: string;
-  username: string;
+  id: string;
+  name: string;
   email: string;
   role: string;
-  createdAt: string;
+  goal?: string;
+  bio?: string;
+  profilePicture?: string;
+  isVerified?: boolean;
+  createdAt?: string;
 }
 
 // Auth service
@@ -78,8 +96,15 @@ export const authService = {
   /**
    * Get current user
    */
-  async getCurrentUser(): Promise<User> {
-    return apiClient.get<User>(API_ENDPOINTS.auth.me);
+  async getCurrentUser(): Promise<UserProfileResponse> {
+    return apiClient.get<UserProfileResponse>(API_ENDPOINTS.auth.me);
+  },
+
+  /**
+   * Update user profile
+   */
+  async updateProfile(data: UpdateProfileData): Promise<UserProfileResponse> {
+    return apiClient.put<UserProfileResponse>(API_ENDPOINTS.auth.me, data);
   },
 
   /**

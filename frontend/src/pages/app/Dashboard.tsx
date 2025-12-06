@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Zap, Target, Trophy, Clock, ArrowRight, ChevronRight } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { authService } from '@/lib/services';
 // Mock data
 const mockSessions = [
   { id: 1, date: '2024-01-15', startTime: '09:00 AM', duration: 45, category: 'Study', status: 'completed' },
@@ -20,12 +21,31 @@ const mockChallenges = [
 
 export default function EndUserDashboard() {
   const { user } = useAuthContext();
-  const userName = user?.name ?? 'Friend';
+  const [userName, setUserName] = useState(user?.name ?? 'Friend');
+  const [userGoal, setUserGoal] = useState('Study 2 hours daily for better grades');
+  const [loading, setLoading] = useState(true);
+
   const todayDate = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
   });
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    try {
+      const response = await authService.getCurrentUser();
+      setUserName(response.user.name || 'Friend');
+      setUserGoal(response.user.goal || 'Set your focus goal in Profile');
+    } catch (error) {
+      console.error('Failed to load user data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
@@ -56,7 +76,7 @@ export default function EndUserDashboard() {
                 Your Focus Goal
               </p>
               <h3 className="text-2xl font-bold text-foreground mb-2">
-                Study 2 hours daily for better grades
+                {userGoal}
               </h3>
               <p className="text-muted-foreground">
                 Daily Target: <span className="font-semibold text-foreground">120 minutes</span>

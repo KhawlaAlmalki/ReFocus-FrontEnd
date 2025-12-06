@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Zap } from 'lucide-react';
+import { Calendar, Clock, Zap, Loader2 } from 'lucide-react';
+import { sessionService } from '@/lib/services/session.service';
+import { toast } from 'sonner';
 
 type FilterPeriod = 'week' | 'month' | 'all';
 type FocusCategory = 'Study' | 'Work' | 'Reading' | 'Deep Work';
@@ -16,22 +18,34 @@ interface Session {
   status: 'completed' | 'interrupted';
 }
 
-// Mock data
-const mockSessions: Session[] = [
-  { id: 1, date: '2024-01-17', startTime: '09:00 AM', duration: 45, category: 'Study', status: 'completed' },
-  { id: 2, date: '2024-01-17', startTime: '02:30 PM', duration: 60, category: 'Deep Work', status: 'completed' },
-  { id: 3, date: '2024-01-17', startTime: '08:00 PM', duration: 20, category: 'Reading', status: 'interrupted' },
-  { id: 4, date: '2024-01-16', startTime: '10:15 AM', duration: 25, category: 'Study', status: 'completed' },
-  { id: 5, date: '2024-01-16', startTime: '03:45 PM', duration: 50, category: 'Work', status: 'completed' },
-  { id: 6, date: '2024-01-15', startTime: '07:00 PM', duration: 40, category: 'Study', status: 'completed' },
-  { id: 7, date: '2024-01-14', startTime: '09:30 AM', duration: 55, category: 'Deep Work', status: 'completed' },
-  { id: 8, date: '2024-01-14', startTime: '01:00 PM', duration: 30, category: 'Reading', status: 'completed' },
-  { id: 9, date: '2024-01-13', startTime: '08:00 AM', duration: 45, category: 'Work', status: 'completed' },
-  { id: 10, date: '2024-01-13', startTime: '04:00 PM', duration: 35, category: 'Study', status: 'interrupted' },
-];
-
 export default function Log() {
   const [filterPeriod, setFilterPeriod] = useState<FilterPeriod>('week');
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadSessions();
+  }, []);
+
+  const loadSessions = async () => {
+    try {
+      setLoading(true);
+      const response = await sessionService.getSessions();
+      const mappedSessions = response.sessions.map(session => ({
+        id: parseInt(session.id),
+        date: new Date(session.date || session.createdAt || '').toISOString().split('T')[0],
+        startTime: session.startTime || new Date(session.createdAt || '').toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        duration: session.duration,
+        category: session.category as FocusCategory,
+        status: session.status,
+      }));
+      setSessions(mappedSessions);
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to load sessions');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getCategoryColor = (category: FocusCategory) => {
     const colors: { [key: string]: string } = {
@@ -51,15 +65,15 @@ export default function Log() {
 
   // Filter sessions based on selected period
   const getFilteredSessions = () => {
-    const today = new Date('2024-01-17');
+    const today = new Date();
     const oneWeekAgo = new Date(today);
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     const oneMonthAgo = new Date(today);
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-    return mockSessions.filter((session) => {
+    return sessions.filter((session) => {
       const sessionDate = new Date(session.date);
-      
+
       switch (filterPeriod) {
         case 'week':
           return sessionDate >= oneWeekAgo && sessionDate <= today;
@@ -102,6 +116,14 @@ export default function Log() {
   };
 
   const stats = calculateStats();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-muted flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-muted py-8">

@@ -66,6 +66,12 @@ const userSchema = new mongoose.Schema(
       maxlength: 500
     },
 
+    goal: {
+      type: String,
+      default: '',
+      maxlength: 200
+    },
+
     // ===== COACH PROFILE FIELDS =====
     specialization: {
       type: String,

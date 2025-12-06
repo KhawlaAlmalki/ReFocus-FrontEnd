@@ -230,6 +230,7 @@ export const getCurrentUser = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      message: "User data loaded",
       user: {
         id: user._id,
         name: user.name,
@@ -238,6 +239,7 @@ export const getCurrentUser = async (req, res) => {
         isVerified: user.isEmailVerified,
         profilePicture: user.avatar,
         bio: user.bio,
+        goal: user.goal,
         phone: user.phone,
         dateOfBirth: user.dateOfBirth,
         gender: user.gender,
@@ -257,6 +259,105 @@ export const getCurrentUser = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Server error while fetching user profile",
+      error: err.message
+    });
+  }
+};
+
+// Update current user profile (name, email, goal only)
+export const updateCurrentUser = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { name, email, goal } = req.body;
+
+    // Get current user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    // Validate and update name if provided
+    if (name !== undefined) {
+      const nameValidation = validateName(name);
+      if (!nameValidation.isValid) {
+        return res.status(400).json({
+          success: false,
+          message: nameValidation.error
+        });
+      }
+      user.name = name;
+    }
+
+    // Validate and update email if provided
+    if (email !== undefined && email !== user.email) {
+      const emailValidation = validateEmail(email);
+      if (!emailValidation.isValid) {
+        return res.status(400).json({
+          success: false,
+          message: emailValidation.error
+        });
+      }
+
+      // Check if email already exists
+      const existingUser = await User.findOne({ email: email.toLowerCase() });
+      if (existingUser && existingUser._id.toString() !== userId) {
+        return res.status(409).json({
+          success: false,
+          message: "Email is already in use by another account"
+        });
+      }
+
+      user.email = email.toLowerCase();
+    }
+
+    // Update goal if provided
+    if (goal !== undefined) {
+      if (goal && goal.length > 200) {
+        return res.status(400).json({
+          success: false,
+          message: "Goal must not exceed 200 characters"
+        });
+      }
+      user.goal = goal;
+    }
+
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isVerified: user.isEmailVerified,
+        profilePicture: user.avatar,
+        bio: user.bio,
+        goal: user.goal,
+        phone: user.phone,
+        dateOfBirth: user.dateOfBirth,
+        gender: user.gender,
+        preferences: user.preferences,
+        isActive: user.isActive,
+        isApprovedCoach: user.isApprovedCoach,
+        isPendingCoach: user.isPendingCoach,
+        coachProfileId: user.coachProfileId,
+        createdAt: user.createdAt,
+        lastLogin: user.lastLogin,
+        loginCount: user.loginCount
+      }
+    });
+
+  } catch (err) {
+    console.error("UPDATE CURRENT USER ERROR:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error while updating profile",
       error: err.message
     });
   }

@@ -27,7 +27,7 @@ export default function Login() {
     const [rememberMe, setRememberMe] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newErrors: { [key: string]: string } = {};
 
@@ -40,24 +40,31 @@ export default function Login() {
         }
 
         setErrors({});
-        login(email, password, role);
-        toast.success("Logged in successfully!");
 
-        switch (role) {
-            case "user":
-                navigate("/app/dashboard");
-                break;
-            case "coach":
-                navigate("/coach/dashboard");
-                break;
-            case "admin":
-                navigate("/admin/users");
-                break;
-            case "developer":
-                navigate("/dev/games");
-                break;
-            default:
-                navigate("/");
+        try {
+            await login(email, password, role);
+            toast.success("Logged in successfully!");
+
+            switch (role) {
+                case "user":
+                    navigate("/app/dashboard");
+                    break;
+                case "coach":
+                    navigate("/coach/dashboard");
+                    break;
+                case "admin":
+                    navigate("/admin/users");
+                    break;
+                case "developer":
+                    navigate("/dev/games");
+                    break;
+                default:
+                    navigate("/");
+            }
+        } catch (error: any) {
+            const errorMessage = error?.message || "Login failed. Please try again.";
+            toast.error(errorMessage);
+            setErrors({ email: errorMessage });
         }
     };
 
@@ -118,12 +125,12 @@ export default function Login() {
                             <Label htmlFor="password" className="text-sm font-semibold">
                                 Password
                             </Label>
-                            <a
-                                href="#"
+                            <Link
+                                to="#"
                                 className="text-sm text-primary hover:text-primary/80 transition-colors"
                             >
                                 Forgot?
-                            </a>
+                            </Link>
                         </div>
                         <div className="relative">
                             <Input

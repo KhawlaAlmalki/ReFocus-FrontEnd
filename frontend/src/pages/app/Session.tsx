@@ -10,8 +10,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { PlayCircle, PauseCircle, RotateCcw, CheckCircle, Zap } from 'lucide-react';
+import { PlayCircle, PauseCircle, RotateCcw, CheckCircle, Zap, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { sessionService } from '@/lib/services/session.service';
 
 type FocusCategory = 'Study' | 'Work' | 'Reading' | 'Deep Work';
 type SessionState = 'idle' | 'running' | 'paused' | 'completed';
@@ -23,6 +24,7 @@ export default function Session() {
   const [sessionState, setSessionState] = useState<SessionState>('idle');
   const [timeRemaining, setTimeRemaining] = useState(25 * 60);
   const [sessionStarted, setSessionStarted] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const minutesRemaining = Math.floor(timeRemaining / 60);
   const secondsRemaining = timeRemaining % 60;
@@ -75,10 +77,22 @@ export default function Session() {
     toast.success('Session ended. You did great! 💪');
   };
 
-  const handleSaveSession = () => {
+  const handleSaveSession = async () => {
     const focusedMinutes = sessionDuration - minutesRemaining;
-    toast.success(`Session saved! You focused for ${focusedMinutes} minutes.`);
-    setTimeout(() => navigate('/app/dashboard'), 1500);
+
+    try {
+      setIsSaving(true);
+      await sessionService.createSession({
+        duration: focusedMinutes,
+        category: category,
+      });
+      toast.success(`Session saved! You focused for ${focusedMinutes} minutes.`);
+      setTimeout(() => navigate('/app/dashboard'), 1500);
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to save session');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleDurationChange = (duration: string) => {
@@ -232,9 +246,22 @@ export default function Session() {
                 </Button>
 
                 {sessionState === 'completed' && (
-                  <Button onClick={handleSaveSession} className="w-full gap-2 bg-success hover:bg-success/90">
-                    <CheckCircle size={20} />
-                    Save Session & Back to Dashboard
+                  <Button
+                    onClick={handleSaveSession}
+                    disabled={isSaving}
+                    className="w-full gap-2 bg-success hover:bg-success/90"
+                  >
+                    {isSaving ? (
+                      <>
+                        <Loader2 size={20} className="animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle size={20} />
+                        Save Session & Back to Dashboard
+                      </>
+                    )}
                   </Button>
                 )}
               </div>

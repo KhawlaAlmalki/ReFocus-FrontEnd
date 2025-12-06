@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Target, Trophy, Zap, Award, Star, Lock, ArrowRight } from 'lucide-react';
+import { Target, Trophy, Zap, Award, Star, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { challengeService } from '@/lib/services/challenge.service';
+import { toast } from 'sonner';
 
 interface Challenge {
   id: number;
@@ -144,22 +146,93 @@ const mockBadges: BadgeType[] = [
 ];
 
 export default function Challenges() {
-  const [challenges, setChallenges] = useState(mockChallenges);
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [enrolling, setEnrolling] = useState<string | null>(null);
   const [hoveredChallenge, setHoveredChallenge] = useState<number | null>(null);
   const [hoveredBadge, setHoveredBadge] = useState<number | null>(null);
 
-  const toggleChallenge = (id: number) => {
-    setChallenges(
-      challenges.map((challenge) =>
-        challenge.id === id
-          ? { ...challenge, joined: !challenge.joined }
-          : challenge
-      )
-    );
+  useEffect(() => {
+    loadChallenges();
+  }, []);
+
+  const loadChallenges = async () => {
+    try {
+      setLoading(true);
+      const response = await challengeService.getChallenges();
+      const mappedChallenges = response.challenges.map(challenge => ({
+        ...challenge,
+        id: parseInt(challenge.id),
+        progress: challenge.progress || 0,
+        total: challenge.total || 7,
+        joined: challenge.joined || false,
+        icon: getIconForCategory(challenge.category),
+        color: getColorForCategory(challenge.category),
+      }));
+      setChallenges(mappedChallenges);
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to load challenges');
+      setChallenges(mockChallenges);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getIconForCategory = (category: string) => {
+    const icons: { [key: string]: React.ReactNode } = {
+      Streak: <Trophy className="w-8 h-8" />,
+      Habit: <Zap className="w-8 h-8" />,
+      Achievement: <Target className="w-8 h-8" />,
+      Milestone: <Award className="w-8 h-8" />,
+    };
+    return icons[category] || <Target className="w-8 h-8" />;
+  };
+
+  const getColorForCategory = (category: string) => {
+    const colors: { [key: string]: string } = {
+      Streak: 'from-orange-400 to-red-500',
+      Habit: 'from-yellow-400 to-orange-500',
+      Achievement: 'from-blue-400 to-cyan-500',
+      Milestone: 'from-purple-400 to-pink-500',
+    };
+    return colors[category] || 'from-blue-400 to-cyan-500';
+  };
+
+  const toggleChallenge = async (id: number) => {
+    const challenge = challenges.find(c => c.id === id);
+    if (!challenge) return;
+
+    if (challenge.joined) {
+      toast.info('Already enrolled in this challenge');
+      return;
+    }
+
+    try {
+      setEnrolling(challenge.id.toString());
+      await challengeService.enrollChallenge(challenge.id.toString());
+      setChallenges(
+        challenges.map((c) =>
+          c.id === id ? { ...c, joined: true } : c
+        )
+      );
+      toast.success(`Enrolled in ${challenge.title}!`);
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to enroll in challenge');
+    } finally {
+      setEnrolling(null);
+    }
   };
 
   const earnedCount = mockBadges.filter((b) => b.earned).length;
   const joinedCount = challenges.filter((c) => c.joined).length;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white py-16 md:py-24">
@@ -268,13 +341,19 @@ export default function Challenges() {
                         {/* Button */}
                         <Button
                           onClick={() => toggleChallenge(challenge.id)}
+                          disabled={enrolling === challenge.id.toString()}
                           className={`w-full rounded-full font-semibold transition-all duration-300 ${
                             challenge.joined
                               ? `bg-gradient-to-r ${challenge.color} text-white hover:shadow-lg`
                               : 'bg-muted text-foreground hover:bg-primary hover:text-white'
                           }`}
                         >
-                          {challenge.joined ? (
+                          {enrolling === challenge.id.toString() ? (
+                            <span className="flex items-center justify-center gap-2">
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Joining...
+                            </span>
+                          ) : challenge.joined ? (
                             <span className="flex items-center justify-center gap-2">
                               ✓ Joined
                               <ArrowRight className="w-4 h-4" />

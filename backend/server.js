@@ -11,7 +11,7 @@ const app = express();
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL || 'http://localhost:5371',
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -35,7 +35,7 @@ const connectDB = async () => {
     console.log("MONGO_URI:", mongoUri ? "✓ Found" : "✗ Missing");
 
     await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 2000,
     });
 
     console.log("✓ Connected to MongoDB successfully");

@@ -30,30 +30,34 @@ export const useAuth = (): UseAuthReturn => {
     const loadUser = async () => {
       if (tokenManager.get() && !user) {
         try {
-          const currentUser = await authService.getCurrentUser();
+          const response = await authService.getCurrentUser();
           const mappedUser: User = {
-            id: currentUser._id,
-            name: currentUser.username,
-            email: currentUser.email,
-            role: currentUser.role as UserRole,
+            id: response.user.id,
+            name: response.user.name,
+            email: response.user.email,
+            role: response.user.role as UserRole,
           };
           setUser(mappedUser);
           localStorage.setItem('refocus_user', JSON.stringify(mappedUser));
         } catch (error) {
           console.error('Failed to load user:', error);
           tokenManager.remove();
+          localStorage.removeItem('refocus_user');
         }
       }
     };
     loadUser();
-  }, []);
+  }, [user]);
 
   const login = useCallback(async (email: string, password: string, role: UserRole) => {
     try {
       const response = await authService.login({ email, password });
+      if (response.token) {
+        tokenManager.set(response.token);
+      }
       const mappedUser: User = {
-        id: response.user._id,
-        name: response.user.username,
+        id: response.user.id,
+        name: response.user.name,
         email: response.user.email,
         role: response.user.role as UserRole,
       };
@@ -80,14 +84,17 @@ export const useAuth = (): UseAuthReturn => {
   const signup = useCallback(async (name: string, email: string, password: string, role: UserRole) => {
     try {
       const response = await authService.register({
-        username: name,
+        name,
         email,
         password,
         role,
       });
+      if (response.token) {
+        tokenManager.set(response.token);
+      }
       const mappedUser: User = {
-        id: response.user._id,
-        name: response.user.username,
+        id: response.user.id,
+        name: response.user.name,
         email: response.user.email,
         role: response.user.role as UserRole,
       };

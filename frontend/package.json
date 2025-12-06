@@ -18,6 +18,7 @@
     "start": "node dist/server/node-build.mjs",
     "test": "vitest --run",
     "format.fix": "prettier --write .",
+    "build:netlify": "vite build",
     "typecheck": "tsc"
   },
   "dependencies": {

@@ -13,7 +13,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { CheckCircle2, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Signup() {
@@ -26,7 +26,6 @@ export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [role, setRole] = useState<UserRole>("user");
-    const [submitted, setSubmitted] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const getPasswordStrength = () => {
@@ -54,7 +53,7 @@ export default function Signup() {
         return "text-success";
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newErrors: { [key: string]: string } = {};
 
@@ -73,47 +72,18 @@ export default function Signup() {
         }
 
         setErrors({});
-        signup(fullName, email, password, role);
-        toast.success("Account created successfully!");
-        setSubmitted(true);
+
+        try {
+            await signup(fullName, email, password, role);
+            toast.success("Account created successfully! Please log in.");
+            navigate("/login");
+        } catch (error: any) {
+            const errorMessage = error?.message || "Registration failed. Please try again.";
+            toast.error(errorMessage);
+            setErrors({ email: errorMessage });
+        }
     };
 
-    if (submitted) {
-        return (
-            <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-white">
-                <div className="absolute inset-0 -z-10">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-                    <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
-                </div>
-
-                <Card className="w-full max-w-md p-8 md:p-12 rounded-3xl border border-border/50 backdrop-blur-sm shadow-lg text-center">
-                    <div className="mb-6">
-                        <div className="flex justify-center mb-4">
-                            <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center">
-                                <CheckCircle2 className="w-8 h-8 text-success" />
-                            </div>
-                        </div>
-                        <h1 className="text-3xl font-bold text-foreground">
-                            Account Created!
-                        </h1>
-                        <p className="text-muted-foreground mt-2">
-                            Welcome to ReFocus, {fullName}!
-                        </p>
-                    </div>
-                    <p className="text-muted-foreground mb-8">
-                        Your account has been created successfully. Let's customize your experience with a quick survey!
-                    </p>
-                    <Button
-                        onClick={() => navigate('/app/kickoff-survey')}
-                        className="w-full rounded-full py-3 text-base font-semibold transition-all duration-300 hover:scale-105"
-                    >
-                        Start Survey
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                </Card>
-            </div>
-        );
-    }
 
     return (
         <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-white">
@@ -330,19 +300,19 @@ export default function Signup() {
                 {/* Terms and Privacy Note */}
                 <p className="mt-8 text-center text-xs text-muted-foreground">
                     By signing up, you agree to our{" "}
-                    <a
-                        href="#"
+                    <Link
+                        to="#"
                         className="text-primary hover:text-primary/80 transition-colors"
                     >
                         Terms of Service
-                    </a>{" "}
+                    </Link>{" "}
                     and{" "}
-                    <a
-                        href="#"
+                    <Link
+                        to="/privacy"
                         className="text-primary hover:text-primary/80 transition-colors"
                     >
                         Privacy Policy
-                    </a>
+                    </Link>
                 </p>
 
                 {/* Footer Links */}
