@@ -293,7 +293,7 @@ npm install
 ```env
 MONGO_URI=your-mongodb-connection-string
 JWT_SECRET=your-super-secret-key
-PORT=7000
+PORT=5050
 ```
 
 **Environment Variables Explained:**
@@ -323,8 +323,8 @@ http://localhost:5050
 - **Frontend:** Open in your browser at `http://localhost:5173`
 
 - **Backend:** Test with a tool like Postman or curl:
-  - `POST http://localhost:7000/api/auth/register`  
-  - `POST http://localhost:7000/api/auth/login`  
+  - `POST http://localhost:5050/api/auth/register`  
+  - `POST http://localhost:5050/api/auth/login`  
 
 Use the returned JWT token as:
 Authorization: Bearer <token>
