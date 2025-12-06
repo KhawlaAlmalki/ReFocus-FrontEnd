@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="280284eb-f5c2-40d8-a784-6f705afc3069" name="Changes" comment="Updated project structure (Back-end added)">
+      <change afterPath="$PROJECT_DIR$/netlify.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.nvmrc" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.nvmrc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/netlify.toml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/netlify.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/netlify.toml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +117,7 @@
       <workItem from="1764614789271" duration="428000" />
       <workItem from="1764615239965" duration="670000" />
       <workItem from="1764616109527" duration="1406000" />
-      <workItem from="1765036313908" duration="10635000" />
+      <workItem from="1765036313908" duration="11029000" />
     </task>
     <task id="LOCAL؜-٠٠٠٠١" summary="New Commit">
       <option name="closed" value="true" />
@@ -175,7 +175,15 @@
       <option name="project" value="LOCAL؜" />
       <updated>1765047460173</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL؜-٠٠٠٠٨" summary="Updated project structure (Back-end added)">
+      <option name="closed" value="true" />
+      <created>1765047968896</created>
+      <option name="number" value="٠٠٠٠٨" />
+      <option name="presentableId" value="LOCAL؜-٠٠٠٠٨" />
+      <option name="project" value="LOCAL؜" />
+      <updated>1765047968896</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
