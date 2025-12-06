@@ -1,4 +1,6 @@
 // API Configuration
+// In production (Netlify), VITE_API_URL should be set to: https://refocus-n0hq.onrender.com/api
+// In development, it falls back to localhost
 export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api';
 
 // API endpoints

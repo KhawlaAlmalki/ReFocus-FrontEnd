@@ -10,16 +10,31 @@ console.log("JWT_SECRET from env:", process.env.JWT_SECRET);
 const app = express();
 
 // CORS Configuration
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:5173',
+  'http://localhost:5371',
+  'https://refocusapp.netlify.app'
+].filter(Boolean); // Remove undefined values
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:5371',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
-app.use(cors({
-    origin: ["https://refocusapp.netlify.app"],
-    methods: ["GET","POST","PUT","DELETE"],
-    credentials: true
-}));
+app.use(cors(corsOptions));
 
 // Accept JSON requests
 app.use(express.json());
