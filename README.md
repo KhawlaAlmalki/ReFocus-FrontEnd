@@ -1,93 +1,115 @@
-# 🌱 ReFocus – Digital Wellness & Focus Coaching Platform
+# 🌱 ReFocus
 
-**ReFocus** is a modern digital wellness web application designed to help students and professionals reduce distractions, stay focused, and build healthier screen habits.
+**Digital Wellness & Focus Coaching Platform**
 
-With one account, users can:
-
-- Run structured **focus sessions**
-- Set **goals** and track **progress**
-- Reflect on their habits via **surveys**
-- (Optionally) Play **focus-supporting mini games**
-- View insights about their productivity trends over time
-
-Different roles (User, Coach, Admin, Developer) share the same platform while seeing tools tailored to their responsibilities.
+A modern web application designed to help students and professionals reduce distractions, stay focused, and build healthier screen habits through structured focus sessions, goal tracking, and personalized insights.
 
 ---
 
-## 🚀 Project Motivation
+## 📋 Table of Contents
+
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [User Roles](#-user-roles)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [API Documentation](#-api-documentation)
+- [Usage Guide](#-usage-guide)
+- [Design Resources](#-design-resources)
+- [Team](#-team)
+
+---
+
+## 🎯 Overview
+
+### The Challenge
 
 Many students and knowledge workers struggle with:
+- Constant digital distractions
+- Lack of structure when studying or working
+- No visibility into how they actually spend focused time
 
-- Constant digital distractions  
-- Lack of structure when studying or working  
-- No visibility into how they actually spend focused time  
+### Our Solution
 
-**ReFocus** aims to:
+ReFocus transforms focus time into visible progress, helping users stay accountable while giving coaches and admins better tools for monitoring and support.
 
-- Turn focus time into **visible progress**
-- Help users **stay accountable** to their goals
-- Give coaches and admins better tools for **monitoring** and **support**
+### Who It's For
 
-It primarily serves:
-
-- 🎓 **Students** who need a structured way to study and revise  
-- 💼 **Professionals** who want to protect their deep work time  
-- 🧠 **Coaches / Mentors** who monitor and support others’ focus habits  
-- 🛠 **Developers / Admins** who manage content, tools, and configuration  
-
----
-
-## 👥 Users & Roles
-
-### 🧑‍💻 Regular Users (Learners / Individuals)
-- Start **focus sessions** using different modes (Study, Deep Work, Reading, etc.)
-- Set and update **personal goals**
-- Complete **habit surveys** to reflect on their digital wellness
-- Review **session history** and progress over time
-- (Optional) Access **mini games** that support focus and cognitive breaks
-
-### 🎓 Coaches / Mentors
-- View summarized **session data** for their assigned users (future or current feature)
-- Track consistency and progress trends
-- Help students/users interpret their patterns and adjust their habits
-
-### 🛡 Admins
-- Manage **user accounts** (view, verify, or deactivate when needed)
-- Access **admin dashboards** (via `/pages/admin`)
-- Oversee global settings, content, and data integrity
-
-### 🧪 Developers (Internal)
-- Use internal **dev tools/pages** under `/pages/dev`
-- Test new features, game integrations, and APIs
-- Run verification endpoints for API and data sync health
+- 🎓 **Students** — Structure study and revision sessions
+- 💼 **Professionals** — Protect deep work time
+- 🧠 **Coaches/Mentors** — Monitor and support focus habits
+- 🛠 **Admins/Developers** — Manage content and configuration
 
 ---
 
 ## ✨ Key Features
 
-- **Focused Work Sessions**  
-  Clean, distraction-free timer interface to run structured focus blocks.
+| Feature | Description |
+|---------|-------------|
+| **Focus Sessions** | Clean, distraction-free timer interface for structured work blocks |
+| **Custom Modes** | Different modes (Study, Deep Work, Reading) to match task types |
+| **Goal Tracking** | Set and update focus goals with backend persistence |
+| **Surveys & Reflections** | Lightweight habit surveys for digital wellness insights |
+| **Session Analytics** | View history, duration, and trends to maintain consistency |
+| **Mini Games** | Optional games for attention improvement and controlled breaks |
+| **Role-Based Access** | Distinct layouts for Users, Coaches, Admins, and Developers |
+| **Modern UI** | Responsive, accessible interface built with React and Tailwind |
 
-- **Custom Focus Modes**  
-  Different modes (e.g., *Study*, *Deep Work*, *Reading*) to match the task type.
+---
 
-- **Goal Tracking**  
-  Users can set and update focus goals that are stored and retrieved via the backend.
+## 👥 User Roles
 
-- **Surveys & Reflections**  
-  Lightweight surveys help users reflect on their digital habits and mood.
+### 🧑‍💻 Regular Users (Learners/Individuals)
 
-- **Session History & Analytics**  
-  Users see past sessions, duration, and trends to maintain consistency.
+- Start focus sessions using different modes
+- Set and update personal goals
+- Complete habit surveys
+- Review session history and progress
+- Access optional focus-supporting mini games
 
-- **Mini Games (Focus Support)**  
-  Optional games to improve attention and provide intentional, controlled breaks.
+### 🎓 Coaches/Mentors
 
-- **Role-Based Pages**  
-  Distinct layouts and functionality for *User*, *Coach*, *Admin*, and *Dev*.
+- View summarized session data for assigned users
+- Track consistency and progress trends
+- Help users interpret patterns and adjust habits
 
-- **Responsive & Accessible UI**  
-  Built with React, TypeScript, and Tailwind CSS for a smooth, modern experience.
+### 🛡 Admins
+
+- Manage user accounts (view, verify, deactivate)
+- Access admin dashboards at `/pages/admin`
+- Oversee global settings and data integrity
+
+### 🧪 Developers
+
+- Use internal dev tools at `/pages/dev`
+- Test new features and API integrations
+- Run verification endpoints for system health
+
+---
+
+## 💻 Tech Stack
+
+### Frontend
+
+| Technology | Purpose |
+|------------|---------|
+| **React + TypeScript** | Core UI framework |
+| **Vite** | Development server and bundler |
+| **Tailwind CSS** | Utility-first styling |
+| **lucide-react** | Icon library |
+| **sonner** | Toast notifications |
+| **tailwind-merge** | Class merging utility |
+| **cva** | Component variants |
+
+### Backend
+
+| Technology | Purpose |
+|------------|---------|
+| **Node.js + Express** | Server framework |
+| **MongoDB** | Database |
+| **JWT** | Authentication |
+| **Mongoose** | ODM for MongoDB |
 
 ---
 
@@ -187,86 +209,60 @@ backend/
 
 ```
 
-## **Usage Instructions**
-
-Once the application is running, users can begin interacting with the system through a simple and intuitive flow:
-
-1. **Open the app** in the browser at the development URL (usually `http://localhost:5173`).
-2. **Navigate to the Landing Page** to explore available focus options.
-3. **Create an account or log in** to access personalized features.
-4. **Select a focus mode** from the available options (e.g., Study, Deep Work).
-5. **Start a focus session** using the built-in timer interface.
-6. **Review session history** to track progress and maintain consistency over time.
-7. **If you have access:**
-      Visit Coach pages to view analytics for users.
-      Visit Admin pages to manage users and configuration.
-      Visit Dev pages for internal testing and feature previews.
-
 ---
 
-## **⚙️ Setup & Installation**
+## 🚀 Getting Started
 
-Follow the steps below to install and run the ReFocus frontend successfully.
+### Prerequisites
 
-### **1. Prerequisites**
-Make sure you have the following installed:
-- **Node.js (LTS recommended)**  
-- **npm** (included with Node.js)
+- **Node.js** (LTS recommended)
+- **npm** or **pnpm**
 
-This project was originally created using **pnpm**, but it can run with both **npm** and **pnpm**.  
-Instructions for both package managers are provided below.
+### Installation
 
----
-
-## **Option A — Using pnpm (Recommended)**
-
-pnpm is the package manager used when generating the project.  
-It guarantees full compatibility with the existing lockfile.
-
-### **Install pnpm:**
+#### Option A: Using pnpm (Recommended)
 ```bash
+# Install pnpm globally
 npm install -g pnpm
+
+# Install dependencies
 pnpm install
+
+# Start development server
 pnpm dev
 ```
-## **Option B — Using npm (If you prefer not to install pnpm)**
 
-When using npm, some dev dependencies (like Vite) may not install automatically due to the project’s original pnpm configuration.
-If you encounter the error:
+#### Option B: Using npm
 ```bash
-sh: vite: command not found
-```
-follow the steps below:
-1. Install dependencies:
-```bash
+# Install dependencies
 npm install
-```
-2. Install Vite manually (required for npm users):
-```bash
+
+# Install Vite (if needed)
 npm install vite --save-dev
-```
-4. Run the development server:
-```bash
+
+# Start development server
 npm run dev
 ```
-After running the dev server, the application will be available at:
 
+### Access the Application
+
+Open your browser and navigate to:
 http://localhost:5173/
 
 ---
 
-# 📡 API Documentation (Backend – Examples)
+## 📡 API Documentation
 
+### Base URL
+http://localhost:5050/api
 
-## 🔐 POST `/api/auth/login` (Sign In)
+### 🔑 Authentication
 
-Authenticates a user and returns a JWT token.
+#### Register New User
 
-- **Method:** `POST`  
-- **URL:** `http://localhost:7000/api/auth/register`
+**Endpoint:** `POST /auth/register`
 
-### Request Body
-
+**Request Body:**
 ```json
 {
   "name": "user",
@@ -275,25 +271,25 @@ Authenticates a user and returns a JWT token.
 }
 ```
 
-### Success Response (example) 
+**Response:**
 ```json
-{  "success":true,
-    "message":"Registration successful. Please check your email to verify your account.",
-    "user":{"id":"69347ffaf3cb519b4ef4705b",
-          "name":"user",
-          "email":"user@example.com",
-          "isEmailVerified":false}}
+{
+  "success": true,
+  "message": "Registration successful. Please check your email to verify your account.",
+  "user": {
+    "id": "69347ffaf3cb519b4ef4705b",
+    "name": "user",
+    "email": "user@example.com",
+    "isEmailVerified": false
+  }
+}
 ```
 
-## 🔐 POST `/api/auth/login`
+#### Login
 
-Authenticates a user and returns a JWT token.
+**Endpoint:** `POST /auth/login`
 
-- **Method:** `POST`  
-- **URL:** `http://localhost:7000/api/auth/login`
-
-### Request Body
-
+**Request Body:**
 ```json
 {
   "email": "user@example.com",
@@ -301,7 +297,7 @@ Authenticates a user and returns a JWT token.
 }
 ```
 
-### Success Response (example)
+**Response:**
 ```json
 {
   "success": true,
@@ -315,49 +311,72 @@ Authenticates a user and returns a JWT token.
 }
 ```
 
-Use this token in Postman or the frontend as:
+### Using the Token
+
+Include the token in subsequent requests:
 ```bash
 Authorization: Bearer <token>
 ```
 
+---
 
-#**🎨 Design & Prototyping**
-### Figma Wireframes / UI Design
-**Figma Wireframes ➜** [ReFocus UI] (https://www.figma.com/design/7a8aJs0gj2oPBG6WoVBQzj/html.to.design-%E2%80%94-by-%E2%80%B9div%E2%80%BARIOTS-%E2%80%94-Import-websites-to-Figma-designs--web-html-css---Community-?node-id=0-1&t=O8KNmJMMLicLffNT-1)
+## 📖 Usage Guide
 
+1. **Open the app** at `http://localhost:5173`
+2. **Navigate** to the landing page to explore focus options
+3. **Create an account** or log in to access personalized features
+4. **Select a focus mode** (Study, Deep Work, Reading, etc.)
+5. **Start a focus session** using the built-in timer
+6. **Review session history** to track progress over time
 
-## ReFocus Project: Tech Stack & Dependencies 💻
+### Role-Specific Access
 
-ReFocus is built using a modern React-based frontend stack to ensure fast performance and a clean developer experience.
-
-### Frameworks & Core Tools 🛠️
-
-- **React + TypeScript** ⚛️ — Core framework for building the user interface.  
-- **Vite** ⚡ — Development server and bundler used to run and build the project.  
-- **Tailwind CSS** 🌬️ — Utility-first CSS framework used for styling and layout.  
-
-### Additional Dependencies ✨
-
-- **lucide-react** 🖼️ — Icon library used throughout the UI.  
-- **sonner** 🔔 — Lightweight toast notification system.  
-- **tailwind-merge** 🧩 — Utility for merging Tailwind classes.  
-- **class-variance-authority (cva)** 🎨 — For building reusable UI component variants.  
-- **localStorage (native)** 🔒 — Used through `AuthContext` to manage session data on the frontend.  
-
-These libraries collectively support a clean workflow, reusable components, and a responsive user interface. ✅
+- **Coaches** — Visit coach pages to view user analytics
+- **Admins** — Access admin pages to manage users and settings
+- **Developers** — Use dev pages for testing and feature previews
 
 ---
 
-## Team Members & Roles 🧑‍💻👩‍💻
+## 🎨 Design Resources
 
-This project was developed collaboratively by the following team members. Each member contributed to specific areas of the application's design, development, and documentation.
+### Figma Wireframes
 
-| Team Member        | Core Contribution                               | Emoji Focus |
-|--------------------|--------------------------------------------------|------------|
-| **Aleen Alghamdi** | Page Development, UI Enhancements               | ✨         |
-| **Khawla Al-Malki**| Frontend Development, Application Structure     | 🏗️        |
-| **Raghad Almaghrabi** | State Management, Contexts & Hooks           | 🧠        |
-| **Shahad Alhassan**| Styling, User Experience Flow                   | 💅         |
+View our complete UI design and wireframes:
 
-These libraries collectively support a clean workflow, reusable components, and a responsive user interface.
+**[ReFocus UI Design on Figma →](https://www.figma.com/design/7a8aJs0gj2oPBG6WoVBQzj/html.to.design)**
+
+---
+
+## 👥 Team
+
+This project was developed collaboratively by a dedicated team of developers, each contributing their unique expertise:
+
+| Team Member  | Focus Area |
+|--------------|------------|
+| **Aleen Alghamdi** | Page Development & UI Enhancements ✨ |
+| **Khawla Al-Malki** |  Application Structure & Architecture 🏗️ |
+| **Raghad Almaghrabi** |  State Management & Contexts 🧠 |
+| **Shahad Alhassan** | Styling & User Experience 💅 |
+
+---
+
+## 📄 License
+
+This project is part of an academic/educational initiative focused on digital wellness and productivity.
+
+---
+
+## 📚 Helpful Resources
+
+* **[React Documentation](https://react.dev/)** — Official React docs and guides
+* **[TypeScript Handbook](https://www.typescriptlang.org/docs/)** — Learn TypeScript fundamentals
+* **[Vite Guide](https://vitejs.dev/guide/)** — Fast build tool documentation
+* **[Tailwind CSS](https://tailwindcss.com/docs)** — Utility-first CSS framework
+* **[Node.js Guides](https://nodejs.org/en/docs/)** — Server-side JavaScript runtime
+* **[Express.js Documentation](https://expressjs.com/)** — Web framework for Node.js
+* **[MongoDB Manual](https://www.mongodb.com/docs/manual/)** — NoSQL database documentation
+* **[Mongoose Docs](https://mongoosejs.com/docs/)** — MongoDB object modeling
+* **[JWT Introduction](https://jwt.io/introduction)** — JSON Web Tokens explained
+* **[GitHub Getting Started](https://docs.github.com/en/get-started)** — Version control basics
+
 
