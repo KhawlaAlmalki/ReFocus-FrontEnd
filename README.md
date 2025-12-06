@@ -213,12 +213,36 @@ backend/
 
 ## 🚀 Getting Started
 
-### Prerequisites
+Follow the steps below to install and run the ReFocus project locally. 🧑‍💻
 
-- **Node.js** (LTS recommended)
-- **npm** or **pnpm**
+This project is organized as a monorepo with:
+- `frontend/` → React + Vite app  
+- `backend/` → Node.js + Express + MongoDB API  
 
-### Installation
+Make sure you run the commands in the correct folder.
+
+---
+
+### 1️⃣ Prerequisites
+
+Make sure you have the following installed:
+- **Node.js (LTS recommended)**
+- **npm** (included with Node.js)
+- (Optional but recommended) **pnpm** for faster installs
+- A **MongoDB database** (e.g., MongoDB Atlas connection string)
+
+---
+
+### 2️⃣ Frontend Setup (ReFocus UI) 🌐
+
+From the project root:
+
+1. **Go to the frontend folder:**
+```bash
+cd frontend
+```
+
+2. **Install dependencies:**
 
 #### Option A: Using pnpm (Recommended)
 ```bash
@@ -244,10 +268,68 @@ npm install vite --save-dev
 npm run dev
 ```
 
-### Access the Application
+3. **Access the Application**
 
 Open your browser and navigate to:
-http://localhost:5173/
+http://localhost:5173
+
+---
+
+### 3️⃣ Backend Setup (API Server) 🗄️
+
+From the project root:
+
+1. **Go to the backend folder:**
+```bash
+cd backend
+```
+
+2. **Install backend dependencies:**
+```bash
+npm install
+```
+
+3. **Create a `.env` file** inside the `backend/` folder with the following variables (adjust values as needed):
+```env
+MONGO_URI=your-mongodb-connection-string
+JWT_SECRET=your-super-secret-key
+PORT=5050
+```
+
+**Environment Variables Explained:**
+- `MONGO_URI` → your MongoDB Atlas or local MongoDB connection string  
+- `JWT_SECRET` → any random secret string used to sign JWTs  
+- `PORT` → the port your backend should run on (default: `7000`)
+
+4. **Start the backend server:**
+
+If you have a dev script in `package.json` (e.g., `"dev": "nodemon server.js"`), use:
+```bash
+npm run dev
+```
+
+Otherwise, run:
+```bash
+node server.js
+```
+
+The backend API will be available at:
+http://localhost:5050
+
+---
+
+### 4️⃣ Verifying Everything is Running ✅
+
+- **Frontend:** Open in your browser at `http://localhost:5173`
+
+- **Backend:** Test with a tool like Postman or curl:
+  - `POST http://localhost:5050/api/auth/register`  
+  - `POST http://localhost:5050/api/auth/login`  
+
+Use the returned JWT token as:
+Authorization: Bearer <token>
+
+Once both frontend and backend are running successfully, you can log in from the UI and start using ReFocus! 🎉
 
 ---
 
