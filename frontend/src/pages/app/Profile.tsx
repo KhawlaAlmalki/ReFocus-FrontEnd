@@ -5,8 +5,9 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { authService } from '@/lib/services';
-import { toast } from 'sonner';
 import { Loader2, User as UserIcon, Mail, Target } from 'lucide-react';
+import { toAppError, getValidationErrors } from '@/lib/errors';
+import { showError, showSuccess } from '@/lib/notify';
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);
@@ -24,11 +25,14 @@ export default function Profile() {
     try {
       setLoading(true);
       const response = await authService.getCurrentUser();
-      setName(response.user.name || '');
-      setEmail(response.user.email || '');
-      setGoal(response.user.goal || '');
-    } catch (error: any) {
-      toast.error(error?.message || 'Failed to load profile');
+
+      // Safe property access with optional chaining
+      setName(response?.user?.name || '');
+      setEmail(response?.user?.email || '');
+      setGoal(response?.user?.goal || '');
+    } catch (error) {
+      const appError = toAppError(error);
+      showError(appError);
     } finally {
       setLoading(false);
     }
@@ -52,11 +56,20 @@ export default function Profile() {
     try {
       setSaving(true);
       await authService.updateProfile({ name, email, goal });
-      toast.success('Profile updated successfully!');
-    } catch (error: any) {
-      const errorMessage = error?.message || 'Failed to update profile';
-      toast.error(errorMessage);
-      setErrors({ email: errorMessage });
+      showSuccess('Profile updated successfully!');
+    } catch (error) {
+      const appError = toAppError(error);
+
+      // Show error toast
+      showError(appError);
+
+      // Extract validation errors if present
+      const validationErrors = getValidationErrors(error);
+      if (validationErrors) {
+        setErrors(validationErrors);
+      } else {
+        setErrors({ email: appError.message });
+      }
     } finally {
       setSaving(false);
     }

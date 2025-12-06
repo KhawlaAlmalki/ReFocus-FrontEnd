@@ -14,7 +14,8 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { ArrowRight, Eye, EyeOff, CheckCircle2 } from "lucide-react";
-import { toast } from "sonner";
+import { toAppError, getValidationErrors } from "@/lib/errors";
+import { showError, showSuccess } from "@/lib/notify";
 
 export default function Signup() {
     const navigate = useNavigate();
@@ -75,12 +76,23 @@ export default function Signup() {
 
         try {
             await signup(fullName, email, password, role);
-            toast.success("Account created successfully! Please log in.");
+            showSuccess("Account created successfully! Please log in.");
             navigate("/login");
-        } catch (error: any) {
-            const errorMessage = error?.message || "Registration failed. Please try again.";
-            toast.error(errorMessage);
-            setErrors({ email: errorMessage });
+        } catch (error) {
+            // Convert to AppError for consistent handling
+            const appError = toAppError(error);
+
+            // Show error toast
+            showError(appError);
+
+            // Extract validation errors if present
+            const validationErrors = getValidationErrors(error);
+            if (validationErrors) {
+                setErrors(validationErrors);
+            } else {
+                // Set generic error on email field for visual feedback
+                setErrors({ email: appError.message });
+            }
         }
     };
 

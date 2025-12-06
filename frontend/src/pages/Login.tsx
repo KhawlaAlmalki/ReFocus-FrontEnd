@@ -14,8 +14,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
 import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { toAppError, getValidationErrors } from "@/lib/errors";
+import { showError, showSuccess } from "@/lib/notify";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -43,7 +44,7 @@ export default function Login() {
 
         try {
             await login(email, password, role);
-            toast.success("Logged in successfully!");
+            showSuccess("Logged in successfully!");
 
             switch (role) {
                 case "user":
@@ -61,10 +62,21 @@ export default function Login() {
                 default:
                     navigate("/");
             }
-        } catch (error: any) {
-            const errorMessage = error?.message || "Login failed. Please try again.";
-            toast.error(errorMessage);
-            setErrors({ email: errorMessage });
+        } catch (error) {
+            // Convert to AppError for consistent handling
+            const appError = toAppError(error);
+
+            // Show error toast
+            showError(appError);
+
+            // Extract validation errors if present
+            const validationErrors = getValidationErrors(error);
+            if (validationErrors) {
+                setErrors(validationErrors);
+            } else {
+                // Set generic error on email field for visual feedback
+                setErrors({ email: appError.message });
+            }
         }
     };
 

@@ -1,6 +1,7 @@
 import { API_BASE_URL } from '../config/api';
+import { toAppError, AppError } from './errors';
 
-// Types for API requests and responses
+// DEPRECATED: Use AppError from errors.ts instead
 export interface ApiError {
   message: string;
   status: number;
@@ -57,7 +58,11 @@ class ApiClient {
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          // Convert to AppError and throw
+          throw toAppError({
+            status: response.status,
+            message: `HTTP error! status: ${response.status}`,
+          });
         }
         return null as T;
       }
@@ -65,23 +70,24 @@ class ApiClient {
       const data = await response.json();
 
       if (!response.ok) {
-        const error: ApiError = {
+        // Convert to AppError before throwing
+        const apiError = {
           message: data.message || 'An error occurred',
           status: response.status,
           errors: data.errors,
         };
-        throw error;
+        throw toAppError(apiError);
       }
 
       return data;
     } catch (error) {
-      if (error instanceof Error && 'status' in error) {
+      // If already an AppError, re-throw it
+      if (error && typeof error === 'object' && 'type' in error) {
         throw error;
       }
-      throw {
-        message: error instanceof Error ? error.message : 'Network error',
-        status: 0,
-      } as ApiError;
+
+      // Convert any other error to AppError
+      throw toAppError(error);
     }
   }
 
