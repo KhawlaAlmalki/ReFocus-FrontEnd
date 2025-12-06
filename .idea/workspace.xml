@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="280284eb-f5c2-40d8-a784-6f705afc3069" name="Changes" comment="Updated project structure (Back-end added)">
-      <change afterPath="$PROJECT_DIR$/netlify.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/netlify.toml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +116,7 @@
       <workItem from="1764614789271" duration="428000" />
       <workItem from="1764615239965" duration="670000" />
       <workItem from="1764616109527" duration="1406000" />
-      <workItem from="1765036313908" duration="11029000" />
+      <workItem from="1765036313908" duration="12086000" />
     </task>
     <task id="LOCAL؜-٠٠٠٠١" summary="New Commit">
       <option name="closed" value="true" />
@@ -183,7 +182,23 @@
       <option name="project" value="LOCAL؜" />
       <updated>1765047968896</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL؜-٠٠٠٠٩" summary="Updated project structure (Back-end added)">
+      <option name="closed" value="true" />
+      <created>1765048369527</created>
+      <option name="number" value="٠٠٠٠٩" />
+      <option name="presentableId" value="LOCAL؜-٠٠٠٠٩" />
+      <option name="project" value="LOCAL؜" />
+      <updated>1765048369527</updated>
+    </task>
+    <task id="LOCAL؜-٠٠٠١٠" summary="Updated project structure (Back-end added)">
+      <option name="closed" value="true" />
+      <created>1765048567371</created>
+      <option name="number" value="٠٠٠١٠" />
+      <option name="presentableId" value="LOCAL؜-٠٠٠١٠" />
+      <option name="project" value="LOCAL؜" />
+      <updated>1765048567371</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
