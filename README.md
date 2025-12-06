@@ -358,11 +358,6 @@ This project was developed collaboratively by a dedicated team of developers, ea
 | **Raghad Almaghrabi** |  State Management & Contexts 🧠 |
 | **Shahad Alhassan** | Styling & User Experience 💅 |
 
----
-
-## 📄 License
-
-This project is part of an academic/educational initiative focused on digital wellness and productivity.
 
 ---
 
