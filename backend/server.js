@@ -15,7 +15,11 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200
 };
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: ["https://refocusapp.netlify.app"],
+    methods: ["GET","POST","PUT","DELETE"],
+    credentials: true
+}));
 
 // Accept JSON requests
 app.use(express.json());
