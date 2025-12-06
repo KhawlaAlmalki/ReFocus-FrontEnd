@@ -1,1 +1,5 @@
-export const API = "https://refocus-n0hq.onrender.com";
+import axios from "axios";
+
+export const api = axios.create({
+    baseURL: "https://refocus-n0hq.onrender.com",
+});
