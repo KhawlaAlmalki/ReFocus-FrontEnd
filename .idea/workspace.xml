@@ -5,70 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="280284eb-f5c2-40d8-a784-6f705afc3069" name="Changes" comment="Updated project structure (Back-end added)">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.http" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/TESTING_GUIDE.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/config/cloudinary.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.nvmrc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/config/database.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/netlify.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/config/environment.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/authController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/controllers/authController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/badgeController.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/challengeController.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/devController.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/menteeController.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/messageController.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/moderationController.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/progressController.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/middleware/rateLimit.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/middleware/upload.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/middleware/validation.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/models/Badge.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/models/Conversation.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/models/GameLicense.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/models/MenteeAssignment.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/models/Message.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/models/ReportedContent.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/models/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/models/User.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/audio.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/badges.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/challenge-templates.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/challenges.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/community.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/game-submissions.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/licenses.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/mentees.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/messages.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/moderation.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/progress.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/utils/badgeAwarder.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/utils/fileUpload.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/utils/helpers.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/utils/notifications.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/utils/realtime.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test-auth.http" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test-coach-profile.http" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test-coach-verification.http" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test-profile.http" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/hooks/useAuth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/hooks/useAuth.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/services/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/services/auth.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/services/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/services/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Signup.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/app/Challenges.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/app/Challenges.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/app/Dashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/app/Dashboard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/app/Log.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/app/Log.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/app/Profile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/app/Profile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/app/Session.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/app/Session.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tests/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tests/fixtures/images/cover-1920x1080.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tests/fixtures/images/invalid-800x600.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tests/fixtures/images/screenshot1-1920x1080.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tests/fixtures/images/screenshot2-1920x1080.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tests/gameSubmissionWorkflow.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/netlify.toml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/netlify.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,7 +116,7 @@
       <workItem from="1764614789271" duration="428000" />
       <workItem from="1764615239965" duration="670000" />
       <workItem from="1764616109527" duration="1406000" />
-      <workItem from="1765036313908" duration="9240000" />
+      <workItem from="1765036313908" duration="9561000" />
     </task>
     <task id="LOCAL؜-٠٠٠٠١" summary="New Commit">
       <option name="closed" value="true" />
@@ -196,7 +134,15 @@
       <option name="project" value="LOCAL؜" />
       <updated>1764941435526</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL؜-٠٠٠٠٣" summary="Updated project structure (Back-end added)">
+      <option name="closed" value="true" />
+      <created>1765046575438</created>
+      <option name="number" value="٠٠٠٠٣" />
+      <option name="presentableId" value="LOCAL؜-٠٠٠٠٣" />
+      <option name="project" value="LOCAL؜" />
+      <updated>1765046575438</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
