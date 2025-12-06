@@ -114,19 +114,22 @@ const userSchema = new mongoose.Schema(
     },
 
     // ===== ACCOUNT STATUS =====
+    // NOTE: Email verification is disabled - users are auto-verified on registration
     isEmailVerified: {
       type: Boolean,
-      default: false
+      default: true // Changed from false - auto-verified now
     },
 
     verificationToken: {
       type: String,
       default: null
+      // DEPRECATED - No longer used
     },
 
     verificationTokenExpires: {
       type: Date,
       default: null
+      // DEPRECATED - No longer used
     },
 
     isActive: {

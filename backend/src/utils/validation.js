@@ -1,49 +1,20 @@
 // src/utils/validation.js
 
 export const validatePassword = (password) => {
-  const errors = [];
-
+  // SIMPLIFIED: Only require 6+ characters
   if (!password) {
     return { isValid: false, errors: ['Password is required'] };
   }
 
-  if (password.length < 8) {
-    errors.push('Password must be at least 8 characters long');
+  if (password.length < 6) {
+    return { isValid: false, errors: ['Password must be at least 6 characters'] };
   }
 
   if (password.length > 128) {
-    errors.push('Password must not exceed 128 characters');
+    return { isValid: false, errors: ['Password must not exceed 128 characters'] };
   }
 
-  if (!/[a-z]/.test(password)) {
-    errors.push('Password must contain at least one lowercase letter');
-  }
-
-  if (!/[A-Z]/.test(password)) {
-    errors.push('Password must contain at least one uppercase letter');
-  }
-
-  if (!/\d/.test(password)) {
-    errors.push('Password must contain at least one number');
-  }
-
-  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
-    errors.push('Password must contain at least one special character (!@#$%^&*...)');
-  }
-
-  const commonPasswords = [
-    'password', 'password123', '12345678', 'qwerty', 'abc123',
-    'monkey', '1234567', 'letmein', 'trustno1', 'dragon'
-  ];
-
-  if (commonPasswords.includes(password.toLowerCase())) {
-    errors.push('Password is too common. Please choose a more secure password');
-  }
-
-  return {
-    isValid: errors.length === 0,
-    errors
-  };
+  return { isValid: true, errors: [] };
 };
 
 export const validateEmail = (email) => {

@@ -33,15 +33,7 @@ export const login = async (req, res) => {
       });
     }
 
-    // Check if email is verified
-    if (!user.isEmailVerified) {
-      return res.status(403).json({
-        success: false,
-        message: "Please verify your email before logging in",
-        needsVerification: true,
-        email: user.email
-      });
-    }
+    // EMAIL VERIFICATION CHECK REMOVED - Login allowed immediately after registration
 
     // Check if account is active
     if (!user.isActive) {
@@ -75,25 +67,11 @@ export const login = async (req, res) => {
       { expiresIn: "7d" } // Token valid for 7 days
     );
 
-    // Return user data (password excluded via toJSON method)
+    // SIMPLIFIED RESPONSE - Return only token and minimal user data
     res.status(200).json({
       success: true,
       message: "Login successful",
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        isVerified: user.isEmailVerified,
-        profilePicture: user.avatar,
-        bio: user.bio,
-        isApprovedCoach: user.isApprovedCoach,
-        isPendingCoach: user.isPendingCoach,
-        preferences: user.preferences,
-        lastLogin: user.lastLogin,
-        createdAt: user.createdAt
-      }
+      token
     });
 
   } catch (err) {
